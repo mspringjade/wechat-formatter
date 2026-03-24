@@ -261,7 +261,7 @@ export function renderArticle(markdownText: string, template: TemplateConfig, fo
   customRenderer.blockquote = function (token: any) {
     let html = defaultRenderer.blockquote.call(this, token)
     html = html.replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/i, (m: string, inner: string) => {
-        inner = inner.replace(/<p[^>]*>/gi, '').replace(/<\/p>/gi, '<br><br>')
+        inner = inner.replace(/<p[^>]*>/gi, '').replace(/<\/p>/gi, '<br>')
         inner = inner.replace(/(<br>)+$/i, '')
         return `<blockquote style="${template.blockquoteStyle}">` + template.blockquoteInnerBefore + inner + template.blockquoteInnerAfter + `</blockquote>`
     })
@@ -334,7 +334,7 @@ export function renderArticle(markdownText: string, template: TemplateConfig, fo
 
   customRenderer.link = function (token: any) {
     const html = defaultRenderer.link.call(this, token)
-    return html.replace(/^<a([^>]*)>/i, `<a$1 style="${template.linkStyle}" `)
+    return html.replace(/^<a([^>]*)>/i, `<a$1 style="${template.linkStyle}">`)
   }
 
   customRenderer.table = function (token: any) {
