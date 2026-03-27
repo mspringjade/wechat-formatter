@@ -68,7 +68,9 @@ npm run build
 
 ## 📊 数据统计
 
-本项目集成了 Vercel Analytics，用于收集匿名访问数据，帮助了解工具的使用情况。
+本项目集成了以下数据统计工具：
+- **Vercel Analytics**：收集匿名访问数据，帮助了解工具的使用情况
+- **Google Analytics**：详细的用户行为分析和流量统计
 
 ## 🌐 访问地址
 

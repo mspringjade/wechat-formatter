@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import { JsonLd } from "./json-ld";
 import "./globals.css";
 
@@ -99,6 +100,18 @@ export default function RootLayout({
     >
       <head>
         <JsonLd />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-E96JLD0RWJ"
+          strategy="beforeInteractive"
+        />
+        <Script id="google-analytics" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E96JLD0RWJ');
+          `}
+        </Script>
       </head>
       <body className="min-h-full flex flex-col">
         {children}
