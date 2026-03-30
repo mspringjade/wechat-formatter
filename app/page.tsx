@@ -41,6 +41,7 @@ export default function Home() {
     const [copied, setCopied] = useState(false)
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null)
     const [syncScroll, setSyncScroll] = useState(false)
+    const [showReward, setShowReward] = useState(false)
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
     const previewRef = useRef<HTMLDivElement>(null)
@@ -149,6 +150,43 @@ export default function Home() {
                 </div>
             )}
 
+            {/* 赞赏弹窗 */}
+            {showReward && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                    onClick={() => setShowReward(false)}
+                >
+                    <div 
+                        className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 transform transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="text-center mb-4">
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">☕ 请作者喝杯咖啡</h3>
+                            <p className="text-sm text-gray-500">如果这个工具对你有帮助，欢迎支持一下~</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-4 mb-4">
+                            <img 
+                                src="/reward.png" 
+                                alt="赞赏码" 
+                                className="w-48 h-48 mx-auto object-contain"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.style.display = 'none'
+                                    target.parentElement!.innerHTML = '<div class="w-48 h-48 mx-auto flex items-center justify-center text-gray-400 text-sm">请将赞赏码保存为<br/>public/reward.png</div>'
+                                }}
+                            />
+                        </div>
+                        <p className="text-xs text-gray-400 text-center mb-4">微信扫码赞赏，支持开发者继续维护</p>
+                        <button
+                            onClick={() => setShowReward(false)}
+                            className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl font-medium transition-colors"
+                        >
+                            关闭
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* 顶栏 */}
             <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
                 <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
@@ -160,6 +198,16 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setShowReward(true)}
+                            className="text-gray-500 hover:text-amber-500 hover:bg-amber-50 p-2 rounded-full transition-all"
+                            title="赞赏支持"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v2h-2v-2zm0-2h2V7h-2v7z"/>
+                                <path d="M12 5.5c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                            </svg>
+                        </button>
                         <button
                             onClick={() => copyToClipboard(outputHtml)}
                             className="bg-[#07c160] hover:bg-[#06ad56] text-white px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold shadow-md shadow-green-500/20 transition-all flex items-center gap-2 text-sm sm:text-base active:scale-95 disabled:opacity-50"

@@ -26,7 +26,8 @@ wechat-formatter/
 │   └── favicon.ico        # 网站图标
 ├── public/                # 静态资源
 │   ├── logo.png           # 网站 Logo
-│   └── logo1.png          # 备用 Logo
+│   ├── logo1.png          # 备用 Logo
+│   └── reward.png         # 赞赏码图片
 ├── .agents/skills/        # Agent 技能配置
 ├── package.json           # 项目依赖
 ├── tsconfig.json          # TypeScript 配置
@@ -65,6 +66,7 @@ wechat-formatter/
 - **移动端适配**：Tab 切换模式
 - **一键复制**：使用 `document.execCommand('copy')` 复制渲染后的 HTML
 - **滚动同步**：桌面端可开启编辑区与预览区同步滚动功能（移动端隐藏）
+- **赞赏功能**：顶栏赞赏按钮，点击弹出赞赏码弹窗
 
 ## 开发命令
 
