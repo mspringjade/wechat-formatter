@@ -6,6 +6,7 @@ export interface TemplateConfig {
   desc: string
   category: string
   themeColor: string
+  backgroundColor: string
   baseStyle: {
     color: string
     fontFamily: string
@@ -64,8 +65,9 @@ function generateTemplates(): TemplateConfig[] {
       desc: '标准的点与线排版，适合日常阅读',
       category: 'minimalist',
       themeColor: color,
+      backgroundColor: '#ffffff',
       baseStyle: { color: '#374151', fontFamily: 'system-ui, -apple-system, sans-serif' },
-      containerStyle: 'padding: 16px;',
+      containerStyle: 'padding: 16px; background-color: #ffffff;',
       h1Style: `font-size: 1.4em; font-weight: bold; text-align: center; margin: 24px 0 16px; color: ${color}; border-bottom: 1px solid ${color}; padding-bottom: 8px; line-height: 1.4;`,
       h2Style: `font-size: 1.25em; font-weight: bold; margin: 24px 0 16px; color: #111827; padding-left: 12px; border-left: 4px solid ${color}; line-height: 1.4;`,
       h3Style: `font-size: 1.1em; font-weight: bold; margin: 16px 0 12px; color: #374151; line-height: 1.4;`,
@@ -99,6 +101,7 @@ function generateTemplates(): TemplateConfig[] {
       desc: '方块标识符，适合严谨的行业报告',
       category: 'business',
       themeColor: color,
+      backgroundColor: '#ffffff',
       baseStyle: { color: '#334155', fontFamily: 'system-ui, -apple-system, sans-serif' },
       containerStyle: 'padding: 20px; background-color: #ffffff;',
       h1Style: `font-size: 1.5em; font-weight: 800; text-align: left; margin: 24px 0 24px 0; color: ${color}; border-bottom: 3px solid ${color}; line-height: 1.4; padding-bottom: 8px;`,
@@ -134,6 +137,7 @@ function generateTemplates(): TemplateConfig[] {
       desc: '配有小花图标，给文字呼吸喘息的空间',
       category: 'literary',
       themeColor: color,
+      backgroundColor: '#fdfcfb',
       baseStyle: { color: '#4b5563', fontFamily: '"Noto Serif SC", serif, system-ui' },
       containerStyle: `padding: 24px 16px; background-color: #fdfcfb;`,
       h1Style: `font-size: 1.35em; font-weight: normal; text-align: center; margin: 30px 0; color: ${color}; letter-spacing: 4px; line-height: 1.4;`,
@@ -170,6 +174,7 @@ function generateTemplates(): TemplateConfig[] {
       desc: '打破常规的终端 /> 标识设计',
       category: 'tech',
       themeColor: color,
+      backgroundColor: '#0f172a',
       baseStyle: { color: '#e5e7eb', fontFamily: '"Space Grotesk", sans-serif' },
       containerStyle: `padding: 20px; background-color: #0f172a;`,
       h1Style: `font-size: 1.6em; font-weight: bold; text-align: left; margin: 20px 0 32px 0; color: ${neon}; text-transform: uppercase; letter-spacing: 2px; line-height: 1.4; border-bottom: 2px solid ${color}50; padding-bottom: 12px;`,
@@ -205,6 +210,7 @@ function generateTemplates(): TemplateConfig[] {
       desc: '星星标识与浓烈色彩传递节日喜悦',
       category: 'festive',
       themeColor: color,
+      backgroundColor: '#fffbeb',
       baseStyle: { color: '#451a03', fontFamily: 'system-ui, sans-serif' },
       containerStyle: `padding: 24px; background-color: #fffbeb; border: 4px solid ${color};`,
       h1Style: `font-size: 1.5em; font-weight: bold; text-align: center; margin: 10px 0 30px 0; color: #ffffff; background-color: ${color}; padding: 12px; border-radius: 8px; letter-spacing: 2px; line-height: 1.4;`,
@@ -372,5 +378,5 @@ export function renderArticle(markdownText: string, template: TemplateConfig, fo
 
   const innerHtml = marked.parse(markdownText) as string
 
-  return `<table style="width: 100%; max-width: 100%; border-collapse: collapse; table-layout: fixed;"><tbody><tr><td style="${template.containerStyle} font-size: ${fontSize}px; line-height: ${lineHeight}; color: ${template.baseStyle.color}; font-family: ${template.baseStyle.fontFamily}; word-wrap: break-word; word-break: break-all; box-sizing: border-box;">${innerHtml}</td></tr></tbody></table>`
+  return `<table style="width: 100%; max-width: 100%; border-collapse: collapse; table-layout: fixed; background-color: ${template.backgroundColor};"><tbody><tr><td style="${template.containerStyle} font-size: ${fontSize}px; line-height: ${lineHeight}; color: ${template.baseStyle.color}; font-family: ${template.baseStyle.fontFamily}; word-wrap: break-word; word-break: break-all; box-sizing: border-box;">${innerHtml}</td></tr></tbody></table>`
 }

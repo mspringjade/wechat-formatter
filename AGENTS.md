@@ -47,7 +47,7 @@ wechat-formatter/
   - `festive` - 节庆风（10套）：星星标识、浓烈色彩
 
 - **模板配置接口** `TemplateConfig`：
-  - 基础样式：颜色、字体
+  - 基础样式：颜色、字体、背景色（`backgroundColor`，确保暗黑模式兼容）
   - 各元素样式：标题(h1-h3)、段落、引用、列表、代码块、图片、分隔线、链接、表格等
 
 ### 2. Markdown 渲染
@@ -119,6 +119,10 @@ npm run lint
    - 表格添加 `table-layout: fixed; max-width: 100%;`
    - 单元格添加 `word-wrap: break-word; word-break: break-all;`
    - 避免使用 `width: max-content`，会导致内容溢出
+8. **暗黑模式兼容**：
+   - 必须为所有模板设置明确的 `backgroundColor` 属性
+   - 外层 `<table>` 和内部 `<td>` 都需要设置 `background-color`
+   - 防止用户电脑暗黑模式影响粘贴到公众号后的显示效果
 
 ## 常见开发任务
 
