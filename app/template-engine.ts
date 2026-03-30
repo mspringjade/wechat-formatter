@@ -269,12 +269,17 @@ export function renderArticle(markdownText: string, template: TemplateConfig, fo
     if (textWithoutImg === '') {
       const imagesMatch = pContent.match(/<img[^>]*>/gi)
       if (imagesMatch && imagesMatch.length > 1) {
-        // Multi-image layout
-        const flexImages = imagesMatch.map((imgHtml: string) => {
-          return imgHtml.replace(/style="[^"]*"/i, `style="flex: 1 1 0%; min-width: 0; max-width: 100%; height: auto; object-fit: cover; border-radius: 8px; display: block;"`)
+        // Multi-image layout using table (WeChat compatible)
+        const imgCount = imagesMatch.length
+        const cellWidth = Math.floor(100 / imgCount)
+        const gapWidth = 4
+        
+        const tableCells = imagesMatch.map((imgHtml: string) => {
+          const styledImg = imgHtml.replace(/style="[^"]*"/i, `style="width: 100%; max-width: 100%; height: auto; object-fit: cover; border-radius: 8px; display: block; vertical-align: middle;"`)
+          return `<td style="width: ${cellWidth}%; padding: 0 ${gapWidth}px 0 0; vertical-align: top; box-sizing: border-box;">${styledImg}</td>`
         }).join('')
         
-        return `<section style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin: 0 0 16px 0; width: 100%; box-sizing: border-box;">${flexImages}</section>`
+        return `<table style="width: 100%; max-width: 100%; border-collapse: collapse; table-layout: fixed; margin: 0 0 16px 0;"><tbody><tr>${tableCells}</tr></tbody></table>`
       }
     }
 
@@ -336,14 +341,12 @@ export function renderArticle(markdownText: string, template: TemplateConfig, fo
     const rawCode = token.text
     const escapedCode = rawCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
     
-    const macHeader = `
-      <section style="${template.codeHeaderStyle}">
-        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; margin-right: 6px;"></span>
-        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; margin-right: 6px;"></span>
-        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f;"></span>
-      </section>
-    `
-    return `<section style="${template.codeContainerStyle}">${macHeader}<section style="padding: 0; margin: 0;"><pre style="${template.codeBlockStyle}"><code>${escapedCode}</code></pre></section></section>`
+    const macHeader = `<svg width="42" height="12" viewBox="0 0 42 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="6" fill="#ff5f56"/><circle cx="21" cy="6" r="6" fill="#ffbd2e"/><circle cx="36" cy="6" r="6" fill="#27c93f"/></svg>`
+    const headerBg = template.codeHeaderStyle.match(/background-color:\s*([^;]+)/i)?.[1] || '#e2e8f0'
+    const headerPadding = template.codeHeaderStyle.match(/padding:\s*([^;]+)/i)?.[1] || '8px 12px'
+    const headerBorder = template.codeHeaderStyle.match(/border-bottom:\s*([^;]+)/i)?.[1] || ''
+    const headerBorderStyle = headerBorder ? `border-bottom: ${headerBorder};` : ''
+    return `<section style="${template.codeContainerStyle}"><section style="background-color: ${headerBg}; padding: ${headerPadding}; ${headerBorderStyle}">${macHeader}</section><section style="padding: 0; margin: 0;"><pre style="${template.codeBlockStyle}"><code>${escapedCode}</code></pre></section></section>`
   }
 
   customRenderer.image = function (token: any) {
