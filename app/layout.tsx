@@ -97,6 +97,7 @@ export default function RootLayout({
     <html
       lang="zh-CN"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         <JsonLd />
@@ -112,8 +113,21 @@ export default function RootLayout({
             gtag('config', 'G-E96JLD0RWJ');
           `}
         </Script>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            (function() {
+              var savedTheme = localStorage.getItem('theme');
+              var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+            })();
+          `}
+        </Script>
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}
         <Analytics />
       </body>
