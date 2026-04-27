@@ -90,7 +90,7 @@ export default function Home() {
   };
 
   return (
-    <main className="h-screen overflow-hidden bg-[#f1f3f5] dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col font-sans relative">
+    <main className="h-screen overflow-hidden neo-app-bg flex flex-col font-sans relative">
       <Toast toast={toast} />
 
       <ImageInsertModal

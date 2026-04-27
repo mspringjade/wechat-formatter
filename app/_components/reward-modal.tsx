@@ -10,23 +10,21 @@ export function RewardModal({ open, onClose }: RewardModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center neo-modal-backdrop"
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 transform transition-all"
+        className="neo-modal p-6 max-w-sm w-full mx-4 transform transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center mb-4">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center justify-center gap-2">
-            <Coffee className="w-5 h-5 text-amber-500" />
+          <h3 className="text-xl font-black text-[var(--neo-ink)] mb-2 flex items-center justify-center gap-2 uppercase">
+            <Coffee className="w-5 h-5" />
             请作者喝杯咖啡
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            如果这个工具对你有帮助，欢迎支持一下~
-          </p>
+          <p className="text-sm neo-text-muted font-bold">如果这个工具对你有帮助，欢迎支持一下~</p>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 mb-4">
+        <div className="bg-[var(--neo-yellow)] border-[3px] border-[var(--neo-ink)] shadow-[5px_5px_0_0_var(--neo-ink)] p-4 mb-4">
           <img
             src="/reward.png"
             alt="赞赏码"
@@ -39,12 +37,10 @@ export function RewardModal({ open, onClose }: RewardModalProps) {
             }}
           />
         </div>
-        <p className="text-xs text-gray-400 dark:text-gray-500 text-center mb-4">
-          微信扫码赞赏，支持开发者继续维护
-        </p>
+        <p className="text-xs neo-text-muted text-center mb-4 font-bold">微信扫码赞赏，支持开发者继续维护</p>
         <button
           onClick={onClose}
-          className="w-full py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl font-medium transition-colors"
+          className="neo-button neo-button-ghost w-full py-2.5"
         >
           关闭
         </button>

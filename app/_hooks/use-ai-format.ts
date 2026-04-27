@@ -38,6 +38,7 @@ export function useAiFormat({
     }
 
     setIsAiFormatting(true);
+    const originalText = inputText;
     try {
       const res = await fetch("/api/ai-format", {
         method: "POST",
@@ -51,21 +52,45 @@ export function useAiFormat({
         }),
       });
 
-      const data = (await res.json()) as {
-        markdown?: string;
-        error?: string;
-      };
-
       if (!res.ok) {
-        showToast(data.error || "AI 排版失败，请重试", "error");
+        const data = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        showToast(data?.error || "AI 排版失败，请重试", "error");
         return;
       }
 
-      if (data.markdown) {
-        setInputText(data.markdown);
-        showToast("AI 排版完成");
+      if (!res.body) {
+        showToast("AI 排版服务未返回流式内容，请重试", "error");
+        return;
       }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let streamedText = "";
+      setInputText("");
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        streamedText += decoder.decode(value, { stream: true });
+        setInputText(streamedText);
+      }
+
+      streamedText += decoder.decode();
+      const finalText = streamedText.trim();
+
+      if (!finalText) {
+        setInputText(originalText);
+        showToast("AI 返回内容为空，请重试", "error");
+        return;
+      }
+
+      setInputText(finalText);
+      showToast("AI 排版完成");
     } catch {
+      setInputText(originalText);
       showToast("网络错误，请稍后重试", "error");
     } finally {
       setIsAiFormatting(false);

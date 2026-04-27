@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import type React from "react";
 
 export function useScrollSync(inputRef: React.RefObject<HTMLTextAreaElement | null>) {
-  const [syncScroll, setSyncScroll] = useState(false);
+  const [syncScroll, setSyncScroll] = useState(true);
   const previewRef = useRef<HTMLDivElement>(null);
   const isScrollingRef = useRef<"input" | "preview" | null>(null);
 

@@ -1,6 +1,6 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
-import { generateText } from "ai";
+import { streamText } from "ai";
 
 const MAX_INPUT_LENGTH = 15000;
 type AiProviderType = "openai" | "anthropic";
@@ -86,21 +86,14 @@ export async function POST(req: Request) {
             baseURL: trimmedBaseUrl,
           }).chat(trimmedModel);
 
-    const { text } = await generateText({
+    const result = streamText({
       model: languageModel,
       system: SYSTEM_PROMPT,
       prompt: markdown,
       temperature: 0.3,
     });
 
-    if (!text || !text.trim()) {
-      return Response.json(
-        { error: "AI 返回内容为空，请重试" },
-        { status: 502 },
-      );
-    }
-
-    return Response.json({ markdown: text.trim() });
+    return result.toTextStreamResponse();
   } catch (err: unknown) {
     console.error("AI format error:", err);
 
