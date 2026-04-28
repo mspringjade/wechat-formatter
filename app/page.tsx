@@ -10,7 +10,7 @@ import { RewardModal } from "./_components/reward-modal";
 import { SettingsPane } from "./_components/settings-pane";
 import { Toast } from "./_components/toast";
 import { sampleText } from "./_lib/formatter-constants";
-import type { ActiveTab } from "./_types/formatter";
+import type { ActiveTab, FormatTweaks } from "./_types/formatter";
 import { useAiFormat } from "./_hooks/use-ai-format";
 import { useAiSettings } from "./_hooks/use-ai-settings";
 import { useClipboardCopy } from "./_hooks/use-clipboard-copy";
@@ -21,13 +21,25 @@ import { useToast } from "./_hooks/use-toast";
 import { useWordCount } from "./_hooks/use-word-count";
 import { allTemplates, groupedTemplates, renderArticle } from "./template-engine";
 
+const DEFAULT_FORMAT_TWEAKS: FormatTweaks = {
+  fontSize: 16,
+  lineHeight: 1.8,
+  paragraphSpacing: 16,
+  firstLineIndent: false,
+  pagePaddingTop: 16,
+  pagePaddingRight: 16,
+  pagePaddingBottom: 16,
+  pagePaddingLeft: 16,
+  letterSpacing: 0,
+  imageRadius: 8,
+};
+
 export default function Home() {
   const [inputText, setInputText] = useState(sampleText);
   const [activeTab, setActiveTab] = useState<ActiveTab>("input");
   const [currentTemplateId, setCurrentTemplateId] = useState<string>("minimalist-0");
   const [currentCategory, setCurrentCategory] = useState<string>("minimalist");
-  const [fontSize, setFontSize] = useState(16);
-  const [lineHeight, setLineHeight] = useState(1.8);
+  const [formatTweaks, setFormatTweaks] = useState<FormatTweaks>(DEFAULT_FORMAT_TWEAKS);
   const [showReward, setShowReward] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [imageMap, setImageMap] = useState<Map<string, string>>(new Map());
@@ -82,8 +94,8 @@ export default function Home() {
       return base64 ? `![${alt}](${base64})` : match;
     });
 
-    return renderArticle(processedText, currentTemplate, fontSize, lineHeight);
-  }, [inputText, currentTemplate, fontSize, lineHeight, imageMap]);
+    return renderArticle(processedText, currentTemplate, formatTweaks);
+  }, [inputText, currentTemplate, formatTweaks, imageMap]);
 
   const handleCopy = () => {
     copyToClipboard(outputHtml);
@@ -176,10 +188,9 @@ export default function Home() {
             setCurrentCategory={setCurrentCategory}
             currentTemplateId={currentTemplateId}
             setCurrentTemplateId={setCurrentTemplateId}
-            fontSize={fontSize}
-            setFontSize={setFontSize}
-            lineHeight={lineHeight}
-            setLineHeight={setLineHeight}
+            formatTweaks={formatTweaks}
+            setFormatTweaks={setFormatTweaks}
+            onResetFormatTweaks={() => setFormatTweaks(DEFAULT_FORMAT_TWEAKS)}
             syncScroll={syncScroll}
             setSyncScroll={setSyncScroll}
           />

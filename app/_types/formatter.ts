@@ -2,6 +2,19 @@ export type ActiveTab = "input" | "preview" | "settings";
 
 export type AiProviderType = "openrouter" | "openai" | "anthropic";
 
+export type FormatTweaks = {
+  fontSize: number;
+  lineHeight: number;
+  paragraphSpacing: number;
+  firstLineIndent: boolean;
+  pagePaddingTop: number;
+  pagePaddingRight: number;
+  pagePaddingBottom: number;
+  pagePaddingLeft: number;
+  letterSpacing: number;
+  imageRadius: number;
+};
+
 export type OpenRouterModel = {
   id: string;
   name: string;

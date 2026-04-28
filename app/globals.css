@@ -60,8 +60,7 @@ body {
 .neo-app-bg {
   background:
     linear-gradient(90deg, rgba(21, 21, 21, 0.045) 1px, transparent 1px),
-    linear-gradient(rgba(21, 21, 21, 0.045) 1px, transparent 1px),
-    var(--neo-bg);
+    linear-gradient(rgba(21, 21, 21, 0.045) 1px, transparent 1px), var(--neo-bg);
   background-size: 28px 28px;
   color: var(--neo-ink);
 }
@@ -69,8 +68,7 @@ body {
 .dark .neo-app-bg {
   background:
     linear-gradient(90deg, rgba(248, 237, 218, 0.07) 1px, transparent 1px),
-    linear-gradient(rgba(248, 237, 218, 0.07) 1px, transparent 1px),
-    var(--neo-bg);
+    linear-gradient(rgba(248, 237, 218, 0.07) 1px, transparent 1px), var(--neo-bg);
 }
 
 .neo-panel {
@@ -262,38 +260,12 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5563;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  display: none;
 }
 
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
-}
-
-.dark .custom-scrollbar {
-  scrollbar-color: #4b5563 transparent;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {

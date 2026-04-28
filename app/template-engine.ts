@@ -1,4 +1,5 @@
 import { marked, type Tokens } from "marked";
+import type { FormatTweaks } from "./_types/formatter";
 
 export interface TemplateConfig {
   id: string;
@@ -159,9 +160,7 @@ function hexToRgba(hex: string, alpha: number) {
 
 function getStyleValue(style: string, property: string) {
   const escapedProperty = property.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-  const match = style.match(
-    new RegExp(`${escapedProperty}\\s*:\\s*([^;]+)`, "i"),
-  );
+  const match = style.match(new RegExp(`${escapedProperty}\\s*:\\s*([^;]+)`, "i"));
   return match?.[1]?.trim() ?? "";
 }
 
@@ -215,8 +214,7 @@ function generateTemplates(): TemplateConfig[] {
       codeContainerStyle: `margin: 20px 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; overflow: hidden; background-color: #f8fafc;`,
       codeHeaderStyle: `background-color: #e2e8f0; padding: 8px 12px; font-size: 0; line-height: 1;`,
       codeBlockStyle: `margin: 0; padding: 16px; overflow-x: auto; color: #334155; font-size: 13px; font-family: monospace; line-height: 1.6; white-space: pre-wrap; word-break: break-all;`,
-      imgStyle:
-        "max-width: 100%; border-radius: 8px; display: block; margin: 20px auto;",
+      imgStyle: "max-width: 100%; border-radius: 8px; display: block; margin: 20px auto;",
       hrStyle: `border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;`,
       linkStyle: `color: ${color}; text-decoration: none; border-bottom: 1px dashed ${color};`,
       tableStyle:
@@ -364,13 +362,11 @@ function generateTemplates(): TemplateConfig[] {
       h1Style: `font-size: 1.5em; font-weight: bold; text-align: center; margin: 10px 0 30px 0; color: #ffffff; background-color: ${color}; padding: 12px; border-radius: 8px; letter-spacing: 2px; line-height: 1.4;`,
       h2Style: `font-size: 1.2em; font-weight: bold; text-align: center; background-color: #fef3c7; color: ${color}; border: 2px solid ${color}; margin: 24px auto 20px auto; padding: 8px 24px; border-radius: 20px; display: inline-block; line-height: 1.4;`,
       h3Style: `font-size: 1.1em; font-weight: bold; margin: 16px 0 16px 0; color: ${color}; text-align: center; line-height: 1.4;`,
-      pStyle:
-        "margin: 0 0 16px 0; line-height: 1.8; text-indent: 2em; color: #78350f;",
+      pStyle: "margin: 0 0 16px 0; line-height: 1.8; text-indent: 2em; color: #78350f;",
       blockquoteStyle: `border: 2px dashed ${color}; border-radius: 8px; margin: 24px 0; padding: 16px; color: #92400e; background-color: #fef3c7; text-align: center; font-weight: 500;`,
       blockquoteInnerBefore: ``,
       blockquoteInnerAfter: ``,
-      listStyle:
-        "margin: 0 0 16px 0; padding: 0; color: #78350f; list-style-type: none;",
+      listStyle: "margin: 0 0 16px 0; padding: 0; color: #78350f; list-style-type: none;",
       listItemStyle: "margin: 0 0 10px 0; line-height: 1.7;",
       listIcon: `<span style="display: inline-block; width: 7px; height: 7px; background-color: #ea580c; transform: rotate(45deg); margin-right: 8px; vertical-align: middle;"></span>`,
       strongStyle: `font-weight: bold; color: ${color};`,
@@ -400,11 +396,67 @@ export const groupedTemplates = categoriesList.map((cat) => ({
 export function renderArticle(
   markdownText: string,
   template: TemplateConfig,
-  fontSize: number,
-  lineHeight: number,
+  formatTweaks: FormatTweaks,
 ): string {
   const customRenderer = new marked.Renderer();
   const defaultRenderer = new marked.Renderer();
+
+  const tuneBlockStyle = (
+    style: string,
+    options: {
+      lineHeight?: boolean;
+      paragraphSpacing?: boolean;
+      firstLineIndent?: boolean;
+      letterSpacing?: boolean;
+    } = {},
+  ) => {
+    let nextStyle = style;
+
+    if (options.lineHeight) {
+      nextStyle = ensureStyleValue(nextStyle, "line-height", String(formatTweaks.lineHeight));
+    }
+
+    if (options.paragraphSpacing) {
+      nextStyle = ensureStyleValue(nextStyle, "margin", `0 0 ${formatTweaks.paragraphSpacing}px 0`);
+    }
+
+    if (options.firstLineIndent) {
+      nextStyle = ensureStyleValue(
+        nextStyle,
+        "text-indent",
+        formatTweaks.firstLineIndent ? "2em" : "0",
+      );
+    }
+
+    if (options.letterSpacing) {
+      nextStyle = ensureStyleValue(nextStyle, "letter-spacing", `${formatTweaks.letterSpacing}px`);
+    }
+
+    return nextStyle;
+  };
+
+  const paragraphStyle = tuneBlockStyle(template.pStyle, {
+    lineHeight: true,
+    paragraphSpacing: true,
+    firstLineIndent: true,
+    letterSpacing: true,
+  });
+
+  const listItemStyle = tuneBlockStyle(template.listItemStyle, {
+    lineHeight: true,
+    letterSpacing: true,
+  });
+
+  const blockquoteStyle = tuneBlockStyle(template.blockquoteStyle, {
+    lineHeight: true,
+    letterSpacing: true,
+  });
+
+  const imageStyle = ensureStyleValue(
+    template.imgStyle,
+    "border-radius",
+    `${formatTweaks.imageRadius}px`,
+  );
 
   // Adds background-color to a style string only when it doesn't already have one.
   // This distributes the article background across individual block elements so that
@@ -464,7 +516,7 @@ export function renderArticle(
           .map((imgHtml: string) => {
             const styledImg = imgHtml.replace(
               /style="[^"]*"/i,
-              `style="width: 100%; max-width: 100%; height: auto; object-fit: cover; border-radius: 8px; display: block; vertical-align: middle;"`,
+              `style="width: 100%; max-width: 100%; height: auto; object-fit: cover; border-radius: ${formatTweaks.imageRadius}px; display: block; vertical-align: middle;"`,
             );
             return `<td style="width: ${cellWidth}%; padding: 0 ${gapWidth}px 0 0; vertical-align: top; box-sizing: border-box;">${styledImg}</td>`;
           })
@@ -474,10 +526,7 @@ export function renderArticle(
       }
     }
 
-    return html.replace(
-      /^<p[^>]*>/i,
-      `<p style="${bgFallback(template.pStyle)}">`,
-    );
+    return html.replace(/^<p[^>]*>/i, `<p style="${bgFallback(paragraphStyle)}">`);
   };
 
   customRenderer.blockquote = function (token: Tokens.Blockquote) {
@@ -488,7 +537,7 @@ export function renderArticle(
         inner = inner.replace(/<p[^>]*>/gi, "").replace(/<\/p>/gi, "<br>");
         inner = inner.replace(/(<br>)+$/i, "");
         return (
-          `<blockquote style="${template.blockquoteStyle}">` +
+          `<blockquote style="${blockquoteStyle}">` +
           template.blockquoteInnerBefore +
           inner +
           template.blockquoteInnerAfter +
@@ -511,31 +560,25 @@ export function renderArticle(
 
   customRenderer.listitem = function (token: Tokens.ListItem) {
     let html = defaultRenderer.listitem.call(this, token);
-    html = html.replace(
-      /<li[^>]*>([\s\S]*?)<\/li>/i,
-      (m: string, inner: string) => {
-        inner = inner.replace(/<input disabled="" type="checkbox">/gi, "");
-        inner = inner.replace(/^<p[^>]*>/i, "").replace(/<\/p>$/i, "");
+    html = html.replace(/<li[^>]*>([\s\S]*?)<\/li>/i, (m: string, inner: string) => {
+      inner = inner.replace(/<input disabled="" type="checkbox">/gi, "");
+      inner = inner.replace(/^<p[^>]*>/i, "").replace(/<\/p>$/i, "");
 
-        const iconHtml = !token.task ? template.listIcon : "";
-        // For WeChat: highly compatible flex-like layout using table or inline-block
-        return `<li style="${template.listItemStyle}">
+      const iconHtml = !token.task ? template.listIcon : "";
+      // For WeChat: highly compatible flex-like layout using table or inline-block
+      return `<li style="${listItemStyle}">
         <section style="display: flex; align-items: flex-start; justify-content: flex-start;">
           ${iconHtml}
           <section style="flex: 1;">${inner}</section>
         </section>
       </li>`;
-      },
-    );
+    });
     return html;
   };
 
   customRenderer.strong = function (token: Tokens.Strong) {
     const html = defaultRenderer.strong.call(this, token);
-    return html.replace(
-      /^<strong[^>]*>/i,
-      `<strong style="${template.strongStyle}">`,
-    );
+    return html.replace(/^<strong[^>]*>/i, `<strong style="${template.strongStyle}">`);
   };
 
   customRenderer.em = function (token: Tokens.Em) {
@@ -560,24 +603,16 @@ export function renderArticle(
 
     const macHeader = `<svg width="42" height="12" viewBox="0 0 42 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="6" fill="#ff5f56"/><circle cx="21" cy="6" r="6" fill="#ffbd2e"/><circle cx="36" cy="6" r="6" fill="#27c93f"/></svg>`;
     const headerBg =
-      template.codeHeaderStyle.match(/background-color:\s*([^;]+)/i)?.[1] ||
-      "#e2e8f0";
-    const headerPadding =
-      template.codeHeaderStyle.match(/padding:\s*([^;]+)/i)?.[1] || "8px 12px";
-    const headerBorder =
-      template.codeHeaderStyle.match(/border-bottom:\s*([^;]+)/i)?.[1] || "";
-    const headerBorderStyle = headerBorder
-      ? `border-bottom: ${headerBorder};`
-      : "";
+      template.codeHeaderStyle.match(/background-color:\s*([^;]+)/i)?.[1] || "#e2e8f0";
+    const headerPadding = template.codeHeaderStyle.match(/padding:\s*([^;]+)/i)?.[1] || "8px 12px";
+    const headerBorder = template.codeHeaderStyle.match(/border-bottom:\s*([^;]+)/i)?.[1] || "";
+    const headerBorderStyle = headerBorder ? `border-bottom: ${headerBorder};` : "";
     return `<section style="${template.codeContainerStyle}"><section style="background-color: ${headerBg}; padding: ${headerPadding}; ${headerBorderStyle}">${macHeader}</section><section style="padding: 0; margin: 0;"><pre style="${template.codeBlockStyle}"><code>${escapedCode}</code></pre></section></section>`;
   };
 
   customRenderer.image = function (token: Tokens.Image) {
     const html = defaultRenderer.image.call(this, token);
-    return html.replace(
-      /^<img([^>]*)>/i,
-      `<img$1 style="${template.imgStyle}" />`,
-    );
+    return html.replace(/^<img([^>]*)>/i, `<img$1 style="${imageStyle}" />`);
   };
 
   customRenderer.hr = function () {
@@ -611,10 +646,8 @@ export function renderArticle(
     const isHeader = token.header;
     let style = isHeader ? template.thStyle : template.tdStyle;
     const fallbackCellBackground = isHeader
-      ? getStyleValue(template.thStyle, "background-color") ||
-        template.backgroundColor
-      : getStyleValue(template.tdStyle, "background-color") ||
-        template.backgroundColor;
+      ? getStyleValue(template.thStyle, "background-color") || template.backgroundColor
+      : getStyleValue(template.tdStyle, "background-color") || template.backgroundColor;
 
     style = ensureStyleValue(style, "background-color", fallbackCellBackground);
 
@@ -625,8 +658,7 @@ export function renderArticle(
     }
 
     const tag = isHeader ? "th" : "td";
-    const bgColor =
-      getStyleValue(style, "background-color") || template.backgroundColor;
+    const bgColor = getStyleValue(style, "background-color") || template.backgroundColor;
 
     return html.replace(
       new RegExp(`^<${tag}[^>]*>`, "i"),
@@ -653,7 +685,11 @@ export function renderArticle(
 
   const innerHtml = marked.parse(markdownText) as string;
   const articleContainerStyle = ensureStyleValue(
-    `${template.containerStyle} font-size: ${fontSize}px; line-height: ${lineHeight}; color: ${template.baseStyle.color}; font-family: ${template.baseStyle.fontFamily}; word-wrap: break-word; word-break: break-all; box-sizing: border-box;`,
+    ensureStyleValue(
+      `${template.containerStyle} font-size: ${formatTweaks.fontSize}px; line-height: ${formatTweaks.lineHeight}; letter-spacing: ${formatTweaks.letterSpacing}px; color: ${template.baseStyle.color}; font-family: ${template.baseStyle.fontFamily}; word-wrap: break-word; word-break: break-all; box-sizing: border-box;`,
+      "padding",
+      `${formatTweaks.pagePaddingTop}px ${formatTweaks.pagePaddingRight}px ${formatTweaks.pagePaddingBottom}px ${formatTweaks.pagePaddingLeft}px`,
+    ),
     "background-color",
     template.backgroundColor,
   );
