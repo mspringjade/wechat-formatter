@@ -1,9 +1,10 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
+import type { AiProviderType } from "../../_types/formatter";
+import { openRouterConfig } from "../../_lib/formatter-constants";
 
 const MAX_INPUT_LENGTH = 15000;
-type AiProviderType = "openai" | "anthropic";
 
 const SYSTEM_PROMPT = `你是一个微信公众号 Markdown 排版专家。你的任务是优化用户提供的 Markdown 文本的**排版结构**，使其更适合微信公众号阅读体验。
 
@@ -56,8 +57,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const trimmedBaseUrl = baseUrl?.trim();
-    if (!trimmedBaseUrl) {
+    const selectedProvider: AiProviderType =
+      providerType === "anthropic" || providerType === "openai"
+        ? providerType
+        : "openrouter";
+
+    const trimmedBaseUrl = baseUrl?.trim() || openRouterConfig.baseUrl;
+    if (selectedProvider !== "openrouter" && !baseUrl?.trim()) {
       return Response.json(
         { error: "请先填写 API 地址" },
         { status: 400 },
@@ -71,9 +77,6 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-
-    const selectedProvider: AiProviderType =
-      providerType === "anthropic" ? "anthropic" : "openai";
 
     const languageModel =
       selectedProvider === "anthropic"

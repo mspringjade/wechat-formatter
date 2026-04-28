@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
-import { aiStorageKeys } from "../_lib/formatter-constants";
+import { aiStorageKeys, openRouterConfig } from "../_lib/formatter-constants";
 import type { AiProviderType } from "../_types/formatter";
 import type { ShowToast } from "./use-toast";
 
 export function useAiSettings(showToast: ShowToast) {
   const [showAiConfigModal, setShowAiConfigModal] = useState(false);
-  const [aiProviderType, setAiProviderType] = useState<AiProviderType>("openai");
-  const [aiBaseUrl, setAiBaseUrl] = useState("");
+  const [aiProviderType, setAiProviderType] = useState<AiProviderType>("openrouter");
+  const [aiBaseUrl, setAiBaseUrl] = useState<string>(openRouterConfig.baseUrl);
   const [aiApiKey, setAiApiKey] = useState("");
   const [aiModel, setAiModel] = useState("");
 
   useEffect(() => {
     const savedProvider = localStorage.getItem(aiStorageKeys.provider);
-    if (savedProvider === "openai" || savedProvider === "anthropic") {
+    if (
+      savedProvider === "openrouter" ||
+      savedProvider === "openai" ||
+      savedProvider === "anthropic"
+    ) {
       setAiProviderType(savedProvider);
     }
-    setAiBaseUrl(localStorage.getItem(aiStorageKeys.baseUrl) || "");
+    setAiBaseUrl(localStorage.getItem(aiStorageKeys.baseUrl) || openRouterConfig.baseUrl);
     setAiApiKey(localStorage.getItem(aiStorageKeys.apiKey) || "");
     setAiModel(localStorage.getItem(aiStorageKeys.model) || "");
   }, []);
@@ -46,8 +50,8 @@ export function useAiSettings(showToast: ShowToast) {
     localStorage.removeItem(aiStorageKeys.baseUrl);
     localStorage.removeItem(aiStorageKeys.apiKey);
     localStorage.removeItem(aiStorageKeys.model);
-    setAiProviderType("openai");
-    setAiBaseUrl("");
+    setAiProviderType("openrouter");
+    setAiBaseUrl(openRouterConfig.baseUrl);
     setAiApiKey("");
     setAiModel("");
     showToast("AI 配置已清空");

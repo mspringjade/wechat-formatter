@@ -1,6 +1,16 @@
 export type ActiveTab = "input" | "preview" | "settings";
 
-export type AiProviderType = "openai" | "anthropic";
+export type AiProviderType = "openrouter" | "openai" | "anthropic";
+
+export type OpenRouterModel = {
+  id: string;
+  name: string;
+  description: string;
+  contextLength: number;
+  promptPrice: string;
+  completionPrice: string;
+  isFree: boolean;
+};
 
 export type ToastType = "success" | "error";
 

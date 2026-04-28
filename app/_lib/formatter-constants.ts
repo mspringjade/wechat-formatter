@@ -43,3 +43,10 @@ export const aiStorageKeys = {
   apiKey: "wechat-formatter-ai-api-key",
   model: "wechat-formatter-ai-model",
 } as const;
+
+export const openRouterConfig = {
+  baseUrl: "https://openrouter.ai/api/v1",
+  apiKeyUrl: "https://openrouter.ai/settings/keys",
+  modelsPageUrl: "https://openrouter.ai/models",
+  modelsApiUrl: "https://openrouter.ai/api/v1/models?output_modalities=text",
+} as const;
