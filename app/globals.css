@@ -10,21 +10,23 @@
 }
 
 :root {
-  --background: #f8edda;
+  --background: #f7eedf;
   --foreground: #151515;
-  --neo-bg: #f8edda;
+  --neo-bg: #f7eedf;
   --neo-surface: #fffaf0;
   --neo-ink: #151515;
-  --neo-muted: #625747;
-  --neo-yellow: #f6c945;
-  --neo-pink: #ff6f9f;
-  --neo-cyan: #5fcfe3;
+  --neo-muted: #6a5f4f;
+  /* 顶栏、次要按钮、赞赏码区域：与 neo-green 同色相的浅薄荷强调，替代旧黄条 */
+  --neo-header-accent: #d5ebe0;
+  --neo-yellow: var(--neo-header-accent);
+  --neo-pink: #ef8ba8;
+  --neo-cyan: #c5ded8;
   --neo-green: #67d99a;
-  --neo-app-header: #f6c945;
-  --neo-section-header: #5fcfe3;
-  --neo-template-header: #ff6f9f;
-  --neo-sub-header: #5fcfe3;
-  --neo-stage: #f6c945;
+  --neo-app-header: var(--neo-header-accent);
+  --neo-section-header: #f1e4c8;
+  --neo-template-header: #f1e4c8;
+  --neo-sub-header: #fbf2df;
+  --neo-stage: #f1e4c8;
   --neo-on-header: #151515;
   --neo-border: 3px solid var(--neo-ink);
   --neo-border-thin: 2px solid var(--neo-ink);
@@ -39,15 +41,15 @@
   --neo-surface: #25211c;
   --neo-ink: #f8edda;
   --neo-muted: #cdbf9e;
-  --neo-yellow: #e9bd4a;
-  --neo-pink: #ff7ca8;
-  --neo-cyan: #5bc4d6;
+  --neo-yellow: #c79f47;
+  --neo-pink: #d97892;
+  --neo-cyan: #35544e;
   --neo-green: #7bd99f;
   --neo-app-header: #0f0d0b;
-  --neo-section-header: #123f4a;
-  --neo-template-header: #5a1d37;
-  --neo-sub-header: #173740;
-  --neo-stage: #1f2a3a;
+  --neo-section-header: #25211c;
+  --neo-template-header: #25211c;
+  --neo-sub-header: #1f1b17;
+  --neo-stage: #1f1b17;
   --neo-on-header: #f8edda;
 }
 
@@ -149,7 +151,7 @@ body {
 }
 
 .neo-input:focus {
-  outline: 3px solid var(--neo-pink);
+  outline: 3px solid var(--neo-green);
   outline-offset: 2px;
 }
 
@@ -162,10 +164,15 @@ body {
 }
 
 .neo-tab-active {
-  background-color: var(--neo-pink);
+  background-color: var(--neo-green);
   color: #111111;
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 0 var(--neo-ink);
+}
+
+.neo-selected,
+.neo-selected * {
+  color: #111111;
 }
 
 .neo-toolbar-button {
@@ -183,7 +190,7 @@ body {
 }
 
 .neo-toolbar-button:hover {
-  background-color: var(--neo-yellow);
+  background-color: var(--neo-cyan);
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 0 var(--neo-ink);
 }
@@ -213,12 +220,12 @@ body {
   height: 28px;
   appearance: none;
   background: transparent;
-  accent-color: var(--neo-pink);
+  accent-color: var(--neo-green);
 }
 
 .neo-range::-webkit-slider-runnable-track {
   height: 10px;
-  background: linear-gradient(90deg, var(--neo-pink), var(--neo-cyan));
+  background: linear-gradient(90deg, var(--neo-green), var(--neo-cyan));
   border: var(--neo-border-thin);
   box-shadow: 3px 3px 0 0 var(--neo-ink);
 }
@@ -228,20 +235,20 @@ body {
   height: 20px;
   margin-top: -7px;
   appearance: none;
-  background-color: var(--neo-yellow);
+  background-color: var(--neo-green);
   border: var(--neo-border);
   border-radius: 0;
   box-shadow: 2px 2px 0 0 var(--neo-ink);
 }
 
 .neo-range:focus-visible {
-  outline: 3px solid var(--neo-pink);
+  outline: 3px solid var(--neo-green);
   outline-offset: 3px;
 }
 
 .neo-range::-moz-range-track {
   height: 10px;
-  background: linear-gradient(90deg, var(--neo-pink), var(--neo-cyan));
+  background: linear-gradient(90deg, var(--neo-green), var(--neo-cyan));
   border: var(--neo-border-thin);
   box-shadow: 3px 3px 0 0 var(--neo-ink);
 }
@@ -249,7 +256,7 @@ body {
 .neo-range::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background-color: var(--neo-yellow);
+  background-color: var(--neo-green);
   border: var(--neo-border);
   border-radius: 0;
   box-shadow: 2px 2px 0 0 var(--neo-ink);

@@ -34,13 +34,13 @@ export function ImageInsertModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center mb-4">
-          <h3 className="text-xl font-black text-[var(--neo-ink)] mb-2 uppercase">插入图片</h3>
+          <h3 className="text-xl font-black text-(--neo-ink) mb-2 uppercase">插入图片</h3>
           <p className="text-sm neo-text-muted font-bold">选择本地图片或输入在线图片地址</p>
         </div>
 
         <div className="space-y-4 mb-4">
           <div>
-            <label className="block text-sm font-black text-[var(--neo-ink)] mb-1">
+            <label className="block text-sm font-black text-(--neo-ink) mb-1">
               图片描述
             </label>
             <input
@@ -54,14 +54,14 @@ export function ImageInsertModal({
 
           <div className="flex items-center justify-center">
             <div className="flex items-center gap-3 w-full">
-              <div className="flex-1 h-[3px] bg-[var(--neo-ink)]" />
-              <span className="text-xs font-black text-[var(--neo-ink)]">或</span>
-              <div className="flex-1 h-[3px] bg-[var(--neo-ink)]" />
+              <div className="flex-1 h-[3px] bg-(--neo-ink)" />
+              <span className="text-xs font-black text-(--neo-ink)">或</span>
+              <div className="flex-1 h-[3px] bg-(--neo-ink)" />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-black text-[var(--neo-ink)] mb-1">
+            <label className="block text-sm font-black text-(--neo-ink) mb-1">
               在线图片地址
             </label>
             <input

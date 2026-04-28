@@ -18,13 +18,13 @@ export function RewardModal({ open, onClose }: RewardModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center mb-4">
-          <h3 className="text-xl font-black text-[var(--neo-ink)] mb-2 flex items-center justify-center gap-2 uppercase">
+          <h3 className="text-xl font-black text-(--neo-ink) mb-2 flex items-center justify-center gap-2 uppercase">
             <Coffee className="w-5 h-5" />
             请作者喝杯咖啡
           </h3>
           <p className="text-sm neo-text-muted font-bold">如果这个工具对你有帮助，欢迎支持一下~</p>
         </div>
-        <div className="bg-[var(--neo-yellow)] border-[3px] border-[var(--neo-ink)] shadow-[5px_5px_0_0_var(--neo-ink)] p-4 mb-4">
+        <div className="bg-(--neo-yellow) border-[3px] border-(--neo-ink) shadow-[5px_5px_0_0_var(--neo-ink)] p-4 mb-4">
           <img
             src="/reward.png"
             alt="赞赏码"

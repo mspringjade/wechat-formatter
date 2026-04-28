@@ -252,7 +252,7 @@ export function AiConfigModal({
             <label className="block text-sm font-black text-(--neo-ink) mb-2">
               API 类型
             </label>
-            <div className="grid grid-cols-3 gap-2 bg-(--neo-cyan) border-[3px] border-(--neo-ink) p-2">
+            <div className="grid grid-cols-3 gap-2 bg-(--neo-sub-header) border-[3px] border-(--neo-ink) p-2">
               <button
                 type="button"
                 onClick={() => handleProviderChange("openrouter")}
@@ -420,7 +420,7 @@ export function AiConfigModal({
                       type="button"
                       onClick={() => handleModelChange(model.id)}
                       className={`w-full text-left p-3 border-b-2 border-(--neo-ink) last:border-b-0 hover:bg-(--neo-cyan) ${
-                        aiModel === model.id ? "bg-(--neo-yellow)" : ""
+                        aiModel === model.id ? "neo-selected bg-(--neo-green)" : ""
                       }`}
                       title={model.description}
                     >

@@ -30,8 +30,8 @@ type RangeControlProps = {
 };
 
 const badgeClassNames = {
-  yellow: "bg-[var(--neo-yellow)]",
-  cyan: "bg-[var(--neo-cyan)]",
+  yellow: "bg-(--neo-sub-header)",
+  cyan: "bg-(--neo-cyan)",
 } as const;
 
 function RangeControl({
@@ -49,10 +49,10 @@ function RangeControl({
 
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-xs font-black text-[var(--neo-ink)]">
+      <div className="flex justify-between text-xs font-black text-(--neo-ink)">
         <span>{label}</span>
         <span
-          className={`${badgeClassNames[tone]} border-[2px] border-[var(--neo-ink)] px-1.5 text-[#151515]`}
+          className={`${badgeClassNames[tone]} border-2 border-(--neo-ink) px-1.5 text-[#151515]`}
         >
           {displayValue}
         </span>
@@ -116,14 +116,14 @@ export function SettingsPane({
         <button
           type="button"
           onClick={() => setIsTemplatesOpen((current) => !current)}
-          className="p-4 bg-[var(--neo-template-header)] border-b-[3px] border-[var(--neo-ink)] shrink-0 flex items-center justify-between text-left"
+          className="p-4 bg-(--neo-template-header) border-b-[3px] border-(--neo-ink) shrink-0 flex items-center justify-between text-left"
         >
-          <h2 className="text-[15px] font-black text-[var(--neo-on-header)] flex items-center gap-2 uppercase">
+          <h2 className="text-[15px] font-black text-(--neo-on-header) flex items-center gap-2 uppercase">
             <Sparkles className="w-4 h-4" />
             主题模板 ({allTemplatesCount}款)
           </h2>
           <ChevronDown
-            className={`w-4 h-4 text-[var(--neo-on-header)] transition-transform ${
+            className={`w-4 h-4 text-(--neo-on-header) transition-transform ${
               isTemplatesOpen ? "rotate-180" : ""
             }`}
             strokeWidth={3}
@@ -132,7 +132,7 @@ export function SettingsPane({
 
         {isTemplatesOpen && (
           <>
-            <div className="relative shrink-0 bg-[var(--neo-sub-header)] border-b-[3px] border-[var(--neo-ink)]">
+            <div className="relative shrink-0 bg-(--neo-sub-header) border-b-[3px] border-(--neo-ink)">
               <div className="flex gap-2 overflow-x-auto px-2 py-2 pr-28 scrollbar-hide">
                 {groupedTemplates.map((cat) => (
                   <button
@@ -144,39 +144,39 @@ export function SettingsPane({
                   </button>
                 ))}
               </div>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center bg-gradient-to-l from-[var(--neo-sub-header)] via-[var(--neo-sub-header)] to-transparent pl-8 pr-2">
-                <span className="flex items-center gap-1 border-[2px] border-[var(--neo-ink)] bg-[var(--neo-yellow)] px-1.5 py-0.5 text-[10px] font-black text-[#151515] shadow-[2px_2px_0_0_var(--neo-ink)]">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center bg-linear-to-l from-(--neo-sub-header) via-(--neo-sub-header) to-transparent pl-8 pr-2">
+                <span className="flex items-center gap-1 border-2 border-(--neo-ink) bg-(--neo-surface) px-1.5 py-0.5 text-[10px] font-black text-(--neo-ink) shadow-[2px_2px_0_0_var(--neo-ink)]">
                   <ArrowLeftRight className="w-3 h-3" strokeWidth={3} />
                   左右滑动
                 </span>
               </div>
             </div>
 
-            <div className="p-3 overflow-y-auto flex-1 grid grid-cols-3 2xl:grid-cols-4 gap-3 content-start bg-[var(--neo-surface)] custom-scrollbar">
+            <div className="p-3 overflow-y-auto flex-1 grid grid-cols-3 2xl:grid-cols-4 gap-3 content-start bg-(--neo-surface) custom-scrollbar">
               {groupedTemplates
                 .find((group) => group.id === currentCategory)
                 ?.templates.map((template) => (
                   <button
                     key={template.id}
                     onClick={() => setCurrentTemplateId(template.id)}
-                    className={`relative p-2 border-[2px] border-[var(--neo-ink)] text-center transition-all duration-200 flex flex-col gap-1 items-center justify-center bg-[var(--neo-surface)] shadow-[3px_3px_0_0_var(--neo-ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
+                    className={`relative p-2 border-2 border-(--neo-ink) text-center transition-all duration-200 flex flex-col gap-1 items-center justify-center bg-(--neo-surface) shadow-[3px_3px_0_0_var(--neo-ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
                       currentTemplateId === template.id
-                        ? "bg-[var(--neo-yellow)]"
-                        : "hover:bg-[var(--neo-cyan)]"
+                        ? "neo-selected bg-(--neo-green)"
+                        : "hover:bg-(--neo-cyan)"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-1.5 w-full">
                       <span
-                        className="w-2.5 h-2.5 border-[2px] border-[var(--neo-ink)] shrink-0"
+                        className="w-2.5 h-2.5 border-2 border-(--neo-ink) shrink-0"
                         style={{ backgroundColor: template.themeColor }}
                       />
-                      <span className="font-black text-xs text-[var(--neo-ink)] truncate">
+                      <span className="font-black text-xs text-(--neo-ink) truncate">
                         {template.name}
                       </span>
                     </div>
 
                     {currentTemplateId === template.id && (
-                      <div className="absolute -top-2 -right-2 bg-[var(--neo-green)] text-[#111111] border-[2px] border-[var(--neo-ink)] p-0.5 shadow-[2px_2px_0_0_var(--neo-ink)]">
+                      <div className="absolute -top-2 -right-2 bg-(--neo-green) text-[#111111] border-2 border-(--neo-ink) p-0.5 shadow-[2px_2px_0_0_var(--neo-ink)]">
                         <Check className="w-2.5 h-2.5" strokeWidth={3} />
                       </div>
                     )}
@@ -190,20 +190,20 @@ export function SettingsPane({
       <div
         className={`neo-panel overflow-hidden flex flex-col shrink-0 ${isTweaksOpen ? "flex-1 min-h-0" : ""}`}
       >
-        <div className="relative shrink-0 border-b-[3px] border-[var(--neo-ink)] bg-[var(--neo-surface)]">
+        <div className="relative shrink-0 border-b-[3px] border-(--neo-ink) bg-(--neo-surface)">
           <button
             type="button"
             className="flex w-full items-center justify-between gap-2 p-4 text-left"
             onClick={() => setIsTweaksOpen((current) => !current)}
           >
             <span className="flex min-w-0 flex-1 items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 shrink-0 text-[var(--neo-ink)]" />
-              <span className="text-[14px] font-black text-[var(--neo-ink)] uppercase">
+              <SlidersHorizontal className="w-4 h-4 shrink-0 text-(--neo-ink)" />
+              <span className="text-[14px] font-black text-(--neo-ink) uppercase">
                 细节微调
               </span>
             </span>
             <ChevronDown
-              className={`w-4 h-4 text-[var(--neo-ink)] transition-transform ${
+              className={`w-4 h-4 text-(--neo-ink) transition-transform ${
                 isTweaksOpen ? "rotate-180" : ""
               }`}
               strokeWidth={3}
@@ -258,29 +258,29 @@ export function SettingsPane({
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-black text-[var(--neo-ink)]">首行缩进</div>
+                  <div className="text-xs font-black text-(--neo-ink)">首行缩进</div>
                   <p className="text-[11px] neo-text-muted font-bold">开启后正文段落缩进 2em</p>
                 </div>
                 <button
                   onClick={() =>
                     updateFormatTweaks("firstLineIndent", !formatTweaks.firstLineIndent)
                   }
-                  className={`relative inline-flex h-7 w-12 items-center border-[3px] border-[var(--neo-ink)] transition-colors duration-200 focus:outline-none ${
+                  className={`relative inline-flex h-7 w-12 items-center border-[3px] border-(--neo-ink) transition-colors duration-200 focus:outline-none ${
                     formatTweaks.firstLineIndent
-                      ? "bg-[var(--neo-green)]"
-                      : "bg-[var(--neo-surface)]"
+                      ? "bg-(--neo-green)"
+                      : "bg-(--neo-surface)"
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform bg-[var(--neo-ink)] transition-transform duration-200 ${
+                    className={`inline-block h-4 w-4 transform bg-(--neo-ink) transition-transform duration-200 ${
                       formatTweaks.firstLineIndent ? "translate-x-6" : "translate-x-1"
                     }`}
                   />
                 </button>
               </div>
 
-              <div className="border-[2px] border-[var(--neo-ink)] bg-[var(--neo-surface)] p-3 space-y-3">
-                <div className="text-xs font-black text-[var(--neo-ink)]">页面留白</div>
+              <div className="border-2 border-(--neo-ink) bg-(--neo-surface) p-3 space-y-3">
+                <div className="text-xs font-black text-(--neo-ink)">页面留白</div>
                 <RangeControl
                   label="上留白"
                   value={formatTweaks.pagePaddingTop}
@@ -353,17 +353,17 @@ export function SettingsPane({
       <div className="hidden md:block neo-panel p-4 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ArrowLeftRight className="w-4 h-4 text-[var(--neo-ink)]" />
-            <span className="text-sm font-black text-[var(--neo-ink)]">滚动同步</span>
+            <ArrowLeftRight className="w-4 h-4 text-(--neo-ink)" />
+            <span className="text-sm font-black text-(--neo-ink)">滚动同步</span>
           </div>
           <button
             onClick={() => setSyncScroll(!syncScroll)}
-            className={`relative inline-flex h-7 w-12 items-center border-[3px] border-[var(--neo-ink)] transition-colors duration-200 focus:outline-none ${
-              syncScroll ? "bg-[var(--neo-green)]" : "bg-[var(--neo-surface)]"
+            className={`relative inline-flex h-7 w-12 items-center border-[3px] border-(--neo-ink) transition-colors duration-200 focus:outline-none ${
+              syncScroll ? "bg-(--neo-green)" : "bg-(--neo-surface)"
             }`}
           >
             <span
-              className={`inline-block h-4 w-4 transform bg-[var(--neo-ink)] transition-transform duration-200 ${
+              className={`inline-block h-4 w-4 transform bg-(--neo-ink) transition-transform duration-200 ${
                 syncScroll ? "translate-x-6" : "translate-x-1"
               }`}
             />
