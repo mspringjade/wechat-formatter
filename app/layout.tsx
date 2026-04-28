@@ -2,10 +2,16 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
+import {
+  SITE_BRAND,
+  SITE_DESCRIPTION,
+  SITE_HOST,
+  SITE_OG_SITE_NAME,
+  SITE_TITLE_DEFAULT,
+  SITE_URL,
+} from "@/lib/site-config";
 import { JsonLd } from "./json-ld";
 import "./globals.css";
-
-const SITE_URL = "https://typezen.online";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,12 +25,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: SITE_BRAND,
   title: {
-    default: "公众号一键排版助手 - Markdown转微信排版工具 | 50套精美模板",
-    template: "%s | TypeZen",
+    default: SITE_TITLE_DEFAULT,
+    template: `%s · ${SITE_BRAND}`,
   },
-  description: "免费在线Markdown转微信公众号排版工具，提供极简、商务、文艺、科技、节庆5大类共50套精美模板，支持实时预览、一键复制，让你的公众号文章排版更专业、更美观。",
+  description: SITE_DESCRIPTION,
   keywords: [
+    "TypeZen",
+    "typezen",
+    SITE_HOST,
     "公众号排版",
     "微信公众号排版",
     "Markdown排版",
@@ -35,12 +45,10 @@ export const metadata: Metadata = {
     "文章排版工具",
     "公众号美化",
     "微信文章排版",
-    "TypeZen",
-    "typezen.online",
   ],
-  authors: [{ name: "TypeZen" }],
-  creator: "TypeZen",
-  publisher: "TypeZen",
+  authors: [{ name: SITE_BRAND, url: SITE_URL }],
+  creator: SITE_BRAND,
+  publisher: SITE_BRAND,
   formatDetection: {
     email: false,
     address: false,
@@ -57,22 +65,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_CN",
     url: SITE_URL,
-    siteName: "公众号一键排版助手",
-    title: "公众号一键排版助手 - Markdown转微信排版工具",
-    description: "免费在线Markdown转微信公众号排版工具，50套精美模板一键套用，实时预览，一键复制发布。",
+    siteName: SITE_OG_SITE_NAME,
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "公众号一键排版助手 - TypeZen",
+        alt: `${SITE_OG_SITE_NAME} · ${SITE_HOST}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "公众号一键排版助手 - Markdown转微信排版工具",
-    description: "免费在线Markdown转微信公众号排版工具，50套精美模板一键套用",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
     images: ["/logo.png"],
   },
   robots: {
