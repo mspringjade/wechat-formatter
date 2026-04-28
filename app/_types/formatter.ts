@@ -13,6 +13,7 @@ export type FormatTweaks = {
   pagePaddingLeft: number;
   letterSpacing: number;
   imageRadius: number;
+  themeColor?: string;
 };
 
 export type OpenRouterModel = {

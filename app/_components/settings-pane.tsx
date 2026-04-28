@@ -2,6 +2,7 @@ import {
   ArrowLeftRight,
   Check,
   ChevronDown,
+  Palette,
   RotateCcw,
   SlidersHorizontal,
   Sparkles,
@@ -106,6 +107,10 @@ export function SettingsPane({
     setFormatTweaks((current) => ({ ...current, [key]: value }));
   };
 
+  const currentTemplate = groupedTemplates
+    .flatMap((group) => group.templates)
+    .find((t) => t.id === currentTemplateId);
+
   return (
     <div
       className={`w-full md:w-64 lg:w-[320px] flex-col gap-4 shrink-0 h-full overflow-hidden pb-24 md:pb-0 ${activeTab === "settings" ? "flex" : "hidden md:flex"}`}
@@ -155,19 +160,24 @@ export function SettingsPane({
               </div>
             </div>
 
-            <div className="p-3 overflow-y-auto flex-1 grid grid-cols-3 2xl:grid-cols-4 gap-3 content-start bg-(--neo-surface) custom-scrollbar">
-              {groupedTemplates
-                .find((group) => group.id === currentCategory)
-                ?.templates.map((template) => (
-                  <button
-                    key={template.id}
-                    onClick={() => setCurrentTemplateId(template.id)}
-                    className={`relative p-2 border-[2px] border-(--neo-ink) text-center transition-all duration-200 flex flex-col gap-1 items-center justify-center bg-(--neo-surface) shadow-[3px_3px_0_0_(--neo-ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
-                      currentTemplateId === template.id
-                        ? "bg-(--neo-yellow)"
-                        : "hover:bg-(--neo-cyan)"
-                    }`}
-                  >
+            <div className="p-3 overflow-y-auto flex-1 content-start bg-(--neo-surface) custom-scrollbar space-y-3">
+              <div className="grid grid-cols-3 2xl:grid-cols-4 gap-3">
+                {groupedTemplates
+                  .find((group) => group.id === currentCategory)
+                  ?.templates.map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => {
+                        setCurrentTemplateId(template.id);
+                        // 同步颜色到调色板
+                        updateFormatTweaks("themeColor", template.themeColor);
+                      }}
+                      className={`relative p-2 border-[2px] border-(--neo-ink) text-center transition-all duration-200 flex flex-col gap-1 items-center justify-center bg-(--neo-surface) shadow-[3px_3px_0_0_(--neo-ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
+                        currentTemplateId === template.id
+                          ? "bg-(--neo-yellow)"
+                          : "hover:bg-(--neo-cyan)"
+                      }`}
+                    >
                     <div className="flex items-center justify-center gap-1.5 w-full">
                       <span
                         className="w-2.5 h-2.5 border-[2px] border-(--neo-ink) shrink-0"
@@ -185,6 +195,43 @@ export function SettingsPane({
                     )}
                   </button>
                 ))}
+              </div>
+
+              {/* 调色板工具 */}
+              <div className="border-[2px] border-(--neo-ink) bg-white p-2.5 shadow-[3px_3px_0_0_(--neo-ink)]">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5 text-[11px] font-black text-(--neo-ink)">
+                    <Palette className="w-3.5 h-3.5" />
+                    自定义主题色
+                  </div>
+                  {formatTweaks.themeColor !== currentTemplate?.themeColor && (
+                    <button
+                      onClick={() => updateFormatTweaks("themeColor", currentTemplate?.themeColor)}
+                      className="text-[10px] font-black underline hover:text-(--neo-cyan)"
+                    >
+                      重置默认
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <div className="relative w-10 h-10 shrink-0 border-[2px] border-(--neo-ink) shadow-[2px_2px_0_0_(--neo-ink)] overflow-hidden cursor-pointer active:translate-x-[1px] active:translate-y-[1px] active:shadow-none">
+                    <input
+                      type="color"
+                      id="theme-color-input"
+                      value={formatTweaks.themeColor || currentTemplate?.themeColor || "#ff6f9f"}
+                      onChange={(e) => updateFormatTweaks("themeColor", e.target.value)}
+                      className="absolute -inset-1 w-[150%] h-[150%] cursor-pointer border-none p-0 m-0"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    value={formatTweaks.themeColor || ""}
+                    placeholder={currentTemplate?.themeColor || "输入 Hex 颜色值"}
+                    onChange={(e) => updateFormatTweaks("themeColor", e.target.value)}
+                    className="flex-1 h-10 px-3 py-2 border-[2px] border-(--neo-ink) bg-white text-xs font-bold text-(--neo-ink) focus:outline-none focus:bg-(--neo-yellow) placeholder:text-gray-400"
+                  />
+                </div>
+              </div>
             </div>
           </>
         )}

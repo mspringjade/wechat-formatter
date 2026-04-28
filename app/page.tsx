@@ -32,13 +32,14 @@ const DEFAULT_FORMAT_TWEAKS: FormatTweaks = {
   pagePaddingLeft: 16,
   letterSpacing: 0,
   imageRadius: 8,
+  themeColor: "#ff6f9f",
 };
 
 export default function Home() {
   const [inputText, setInputText] = useState(sampleText);
   const [activeTab, setActiveTab] = useState<ActiveTab>("input");
-  const [currentTemplateId, setCurrentTemplateId] = useState<string>("minimalist-0");
-  const [currentCategory, setCurrentCategory] = useState<string>("minimalist");
+  const [currentTemplateId, setCurrentTemplateId] = useState<string>("neo-brutalism-0");
+  const [currentCategory, setCurrentCategory] = useState<string>("neo-brutalism");
   const [formatTweaks, setFormatTweaks] = useState<FormatTweaks>(DEFAULT_FORMAT_TWEAKS);
   const [showReward, setShowReward] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);

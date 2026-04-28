@@ -1,5 +1,5 @@
-import { Anthropic, OpenAI } from "@lobehub/icons";
-import { Check, ExternalLink, Loader2, Search, Sparkles } from "lucide-react";
+import { Anthropic, OpenAI, OpenRouter } from "@lobehub/icons";
+import { Check, ExternalLink, Loader2, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type React from "react";
 import { openRouterConfig } from "../_lib/formatter-constants";
@@ -260,7 +260,7 @@ export function AiConfigModal({
                   isOpenRouter ? "neo-tab neo-tab-active" : "neo-tab"
                 }`}
               >
-                <Sparkles className="w-4 h-4" />
+                <OpenRouter size={16} />
                 OpenRouter
               </button>
               <button
