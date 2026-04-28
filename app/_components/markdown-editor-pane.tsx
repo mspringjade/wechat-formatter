@@ -224,7 +224,7 @@ export function MarkdownEditorPane({
             <strong>{wordCount.readTime}分钟</strong>
           </span>
         </div>
-        <span>支持 Ctrl+V 粘贴图片</span>
+        <span>支持直接粘贴图片</span>
       </div>
     </div>
   );
