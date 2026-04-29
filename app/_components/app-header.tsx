@@ -1,4 +1,4 @@
-import { CircleDollarSign, Copy, Moon, Sun } from "lucide-react";
+import { CircleDollarSign, Copy, Moon, Star, Sun } from "lucide-react";
 import type React from "react";
 import type { ActiveTab } from "../_types/formatter";
 
@@ -50,6 +50,16 @@ export function AppHeader({
           >
             <CircleDollarSign className="w-5 h-5" />
           </button>
+          <a
+            href="https://github.com/mspringjade/wechat-formatter"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="neo-button neo-button-ghost px-3 py-2 flex items-center gap-1.5"
+            title="GitHub 仓库 · Star 支持"
+          >
+            <Star className="w-4 h-4" />
+            <span className="text-xs font-black hidden sm:inline">Star</span>
+          </a>
           <button
             onClick={onCopy}
             className="neo-button neo-button-primary px-4 py-2 sm:px-6 sm:py-2.5 flex items-center gap-2 text-sm sm:text-base"
