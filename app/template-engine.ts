@@ -208,17 +208,17 @@ function getStylesByCategory(category: string, color: string) {
           fontFamily: "system-ui, -apple-system, sans-serif",
         },
         containerStyle: "padding: 24px; background-color: #ffffff;",
-        h1Style: `font-size: 1.6em; font-weight: 900; text-align: center; margin: 32px 0 24px; color: #000000; background-color: ${color}; border: 3px solid #000000; padding: 12px; box-shadow: 6px 6px 0px #000000; line-height: 1.2; text-transform: uppercase;`,
-        h2Style: `font-size: 1.3em; font-weight: 800; margin: 32px 0 16px; color: #000000; border-bottom: 6px solid #000000; padding-bottom: 4px; display: inline-block; line-height: 1.2;`,
-        h3Style: `font-size: 1.15em; font-weight: 700; margin: 24px 0 12px; color: #000000; background-color: ${hexToRgba(color, 0.2)}; padding: 4px 8px; border: 2px solid #000000; display: inline-block;`,
+        h1Style: `font-size: 1.6em; font-weight: 900; text-align: center; margin: 20px 0; color: #000000; background-color: ${color}; border: 3px solid #000000; padding: 15px 12px; box-shadow: 8px 8px 0px #000000; line-height: 1.3; text-transform: uppercase; letter-spacing: 1px; display: block;`,
+        h2Style: `font-size: 1.4em; font-weight: 800; margin: 24px 0 16px; color: #000000; background-color: ${color}; border: 3px solid #000000; padding: 8px 16px; box-shadow: 5px 5px 0px #000000; display: inline-block; line-height: 1.2;`,
+        h3Style: `font-size: 1.15em; font-weight: 700; margin: 24px 0 12px; color: #000000; background-color: #ffffff; border: 2px solid #000000; padding: 4px 12px; box-shadow: 3px 3px 0px #000000; display: inline-block;`,
         pStyle: "margin: 0 0 16px 0; line-height: 1.8; font-weight: 500;",
-        blockquoteStyle: `border: 3px solid #000000; margin: 24px 0; padding: 16px; color: #000000; background-color: ${hexToRgba(color, 0.1)}; box-shadow: 4px 4px 0px #000000;`,
-        blockquoteInnerBefore: "",
-        blockquoteInnerAfter: "",
+        blockquoteStyle: `border: 3px solid #000000; margin: 24px 0; padding: 20px; color: #000000; background-color: ${hexToRgba(color, 0.1)}; box-shadow: 6px 6px 0px #000000;`,
+        blockquoteInnerBefore: `<span style="display: block; font-size: 2em; line-height: 1; margin-bottom: 10px; color: #000000; font-family: Georgia, serif;">“</span>`,
+        blockquoteInnerAfter: `<span style="display: block; font-size: 2em; line-height: 1; text-align: right; margin-top: 10px; color: #000000; font-family: Georgia, serif;">”</span>`,
         listStyle: "margin: 0 0 16px 0; padding: 0; list-style-type: none;",
         listItemStyle: "margin: 0 0 10px 0; line-height: 1.6; font-weight: 500;",
-        listIcon: `<span style="display: inline-block; width: 12px; height: 12px; background-color: ${color}; border: 2px solid #000000; margin-right: 8px; vertical-align: middle;"></span>`,
-        strongStyle: `font-weight: 800; background-color: ${color}; color: #000000; padding: 0 4px; border: 1px solid #000000;`,
+        listIcon: `<section style="display: inline-block; width: 12px; height: 12px; background-color: ${color}; border: 2px solid #000000; vertical-align: middle; box-shadow: 2px 2px 0px #000000; box-sizing: border-box; overflow: hidden;"><br/></section>`,
+        strongStyle: `font-weight: 800; background-color: ${color}; color: #000000; padding: 0 4px; border: 2px solid #000000;`,
         emStyle: "font-style: italic; text-decoration: underline; text-decoration-thickness: 2px;",
         codeContainerStyle: `margin: 24px 0; border: 3px solid #000000; box-shadow: 6px 6px 0px #000000; background-color: #ffffff; overflow: hidden;`,
         codeHeaderStyle: `background-color: ${color}; padding: 8px 12px; border-bottom: 3px solid #000000;`,
@@ -251,7 +251,7 @@ function getStylesByCategory(category: string, color: string) {
         blockquoteInnerAfter: "",
         listStyle: "margin: 0 0 16px 0; padding: 0; list-style-type: none;",
         listItemStyle: "margin: 0 0 8px 0; line-height: 1.6;",
-        listIcon: `<span style="color: ${color}; margin-right: 8px; font-weight: bold;">•</span>`,
+        listIcon: `<section style="display: inline-block; color: ${color}; font-weight: bold;">•</section>`,
         strongStyle: `font-weight: bold; color: ${color};`,
         emStyle: "font-style: italic; color: #4b5563;",
         codeContainerStyle: `margin: 20px 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; overflow: hidden; background-color: #f8fafc;`,
@@ -285,7 +285,7 @@ function getStylesByCategory(category: string, color: string) {
         blockquoteInnerAfter: "",
         listStyle: "margin: 0 0 16px 0; padding: 0; list-style-type: none;",
         listItemStyle: "margin: 0 0 10px 0; line-height: 1.7;",
-        listIcon: `<span style="color: ${color}; margin-right: 8px; font-size: 12px;">■</span>`,
+        listIcon: `<section style="display: inline-block; color: ${color}; font-size: 12px;">■</section>`,
         strongStyle: `font-weight: bold; color: ${color}; background-color: ${hexToRgba(color, 0.082)}; padding: 0 2px;`,
         emStyle: "font-style: italic; color: #64748b;",
         codeContainerStyle: `margin: 20px 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #475569; overflow: hidden; background-color: #1e293b;`,
@@ -319,7 +319,7 @@ function getStylesByCategory(category: string, color: string) {
         blockquoteInnerAfter: ``,
         listStyle: "margin: 0 0 20px 0; padding: 0; list-style-type: none;",
         listItemStyle: `margin: 0 0 12px 0; line-height: 1.8;`,
-        listIcon: `<span style="display: inline-block; width: 7px; height: 7px; border: 1px solid ${color}; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span>`,
+        listIcon: `<section style="display: inline-block; width: 8px; height: 8px; border: 1px solid ${color}; border-radius: 50%; vertical-align: middle; box-sizing: border-box; overflow: hidden;"><br/></section>`,
         strongStyle: `font-weight: normal; color: #1f2937; border-bottom: 2px solid ${hexToRgba(color, 0.502)};`,
         emStyle: `font-style: italic; color: ${color};`,
         codeContainerStyle: `margin: 24px 0; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.03); border: 1px solid ${hexToRgba(color, 0.188)}; overflow: hidden; background-color: #fdfaf6;`,
@@ -353,7 +353,7 @@ function getStylesByCategory(category: string, color: string) {
         blockquoteInnerAfter: ``,
         listStyle: "margin: 0 0 16px 0; padding: 0; list-style-type: none;",
         listItemStyle: `margin: 0 0 10px 0; line-height: 1.7;`,
-        listIcon: `<span style="color: ${color === "#10b981" ? "#3b82f6" : "#10b981"}; margin-right: 8px; font-weight: bold;">/></span>`,
+        listIcon: `<section style="display: inline-block; color: ${color === "#10b981" ? "#3b82f6" : "#10b981"}; font-weight: bold; font-family: monospace;">/&gt;</section>`,
         strongStyle: `font-weight: bold; color: #ffffff; border-bottom: 1px solid ${color};`,
         emStyle: `color: ${color}; font-style: normal; text-decoration: underline; text-decoration-color: ${color};`,
         codeContainerStyle: `margin: 24px 0; border-radius: 6px; border: 1px solid #334155; overflow: hidden; background-color: #000000;`,
@@ -382,7 +382,7 @@ function getStylesByCategory(category: string, color: string) {
         blockquoteInnerAfter: ``,
         listStyle: "margin: 0 0 16px 0; padding: 0; color: #78350f; list-style-type: none;",
         listItemStyle: "margin: 0 0 10px 0; line-height: 1.7;",
-        listIcon: `<span style="display: inline-block; width: 7px; height: 7px; background-color: #ea580c; transform: rotate(45deg); margin-right: 8px; vertical-align: middle;"></span>`,
+        listIcon: `<section style="display: inline-block; width: 8px; height: 8px; background-color: #ea580c; transform: rotate(45deg); vertical-align: middle; box-sizing: border-box; overflow: hidden;"><br/></section>`,
         strongStyle: `font-weight: bold; color: ${color};`,
         emStyle: `font-style: italic; color: #b45309;`,
         codeContainerStyle: `margin: 24px 0; border-radius: 8px; border: 2px dashed ${color}; overflow: hidden; background-color: #fef3c7;`,
@@ -563,24 +563,44 @@ export function renderArticle(
   };
 
   customRenderer.heading = function (token: Tokens.Heading) {
-    const html = defaultRenderer.heading.call(this, token);
-    if (token.depth === 1) {
-      const s = bgFallback(template.h1Style);
-      return html.replace(/^<h1[^>]*>/i, `<h1 style="${s}">`);
+    const depth = token.depth;
+    const textHtml = this.parser.parseInline(token.tokens);
+
+    let baseStyle = "";
+    if (depth === 1) baseStyle = template.h1Style;
+    else if (depth === 2) baseStyle = template.h2Style;
+    else baseStyle = template.h3Style;
+
+    const s = bgFallback(baseStyle);
+
+    // Extract margin and align
+    const marginMatch = s.match(/margin\s*:\s*([^;]+)/i);
+    const margin = marginMatch ? marginMatch[1] : (depth === 1 ? "32px 0" : "24px 0");
+    const cleanStyle = s.replace(/margin\s*:\s*[^;]+;?/gi, "margin: 0;");
+    
+    const textAlignMatch = cleanStyle.match(/text-align\s*:\s*([^;]+)/i);
+    const textAlign = textAlignMatch ? textAlignMatch[1] : (depth === 1 ? "center" : "left");
+
+    const isInline = cleanStyle.includes("display: inline-block");
+
+    // Use robust nested section structure for WeChat to avoid text displacement
+    if (isInline) {
+      return `<section style="margin: ${margin}; text-align: ${textAlign};">
+        <section style="${cleanStyle} display: inline-block; text-align: left;">
+          <section style="margin: 0; padding: 0; font-size: 1em; font-weight: inherit; line-height: 1.4; background: none; border: none; color: inherit;">
+            ${textHtml}
+          </section>
+        </section>
+      </section>`;
     }
-    if (token.depth === 2) {
-      const s = bgFallback(template.h2Style);
-      return html.replace(
-        /^<h2[^>]*>([\s\S]*?)<\/h2>/i,
-        (m: string, content: string) => `<h2 style="${s}">${content}</h2>`,
-      );
-    }
-    if (token.depth === 3) {
-      const s = bgFallback(template.h3Style);
-      return html.replace(/^<h3[^>]*>/i, `<h3 style="${s}">`);
-    }
-    const s = bgFallback(template.h3Style);
-    return html.replace(/^<h\d[^>]*>/i, `<h${token.depth} style="${s}">`);
+
+    return `<section style="margin: ${margin}; text-align: ${textAlign};">
+      <section style="${cleanStyle}">
+        <section style="margin: 0; padding: 0; font-size: 1em; font-weight: inherit; line-height: 1.4; background: none; border: none; color: inherit;">
+          ${textHtml}
+        </section>
+      </section>
+    </section>`;
   };
 
   customRenderer.paragraph = function (token: Tokens.Paragraph) {
@@ -599,22 +619,22 @@ export function renderArticle(
     if (textWithoutImg === "") {
       const imagesMatch = pContent.match(/<img[^>]*>/gi);
       if (imagesMatch && imagesMatch.length > 1) {
-        // Multi-image layout using table (WeChat compatible)
-        const imgCount = imagesMatch.length;
-        const cellWidth = Math.floor(100 / imgCount);
+        // Multi-image layout using inline-block (Highly compatible, avoids table and flex)
         const gapWidth = 4;
+        const imgCount = imagesMatch.length;
+        const widthPercent = (100 / imgCount) - 1.5;
 
-        const tableCells = imagesMatch
+        const flexItems = imagesMatch
           .map((imgHtml: string) => {
             const styledImg = imgHtml.replace(
               /style="[^"]*"/i,
-              `style="width: 100%; max-width: 100%; height: auto; object-fit: cover; border-radius: ${formatTweaks.imageRadius}px; display: block; vertical-align: middle;"`,
+              `style="width: 100%; height: auto; object-fit: cover; border-radius: ${formatTweaks.imageRadius}px; display: block; vertical-align: middle;"`,
             );
-            return `<td style="width: ${cellWidth}%; padding: 0 ${gapWidth}px 0 0; vertical-align: top; box-sizing: border-box;">${styledImg}</td>`;
+            return `<section style="display: inline-block; width: ${widthPercent}%; padding: 0 ${gapWidth}px; box-sizing: border-box; vertical-align: top;">${styledImg}</section>`;
           })
           .join("");
 
-        return `<table style="width: 100%; max-width: 100%; border-collapse: collapse; table-layout: fixed; margin: 0 0 16px 0;"><tbody><tr>${tableCells}</tr></tbody></table>`;
+        return `<section style="text-align: center; margin: 0 0 16px 0; line-height: 0;">${flexItems}</section>`;
       }
     }
 
@@ -642,30 +662,52 @@ export function renderArticle(
 
   // 列表最外层
   customRenderer.list = function (token: Tokens.List) {
-    const html = defaultRenderer.list.call(this, token);
-    const tag = token.ordered ? "ol" : "ul";
-    return html.replace(
-      new RegExp(`^<${tag}[^>]*>`, "i"),
-      `<${tag} style="${bgFallback(template.listStyle)}">`,
-    );
-  };
-
-  customRenderer.listitem = function (token: Tokens.ListItem) {
-    let html = defaultRenderer.listitem.call(this, token);
-    html = html.replace(/<li[^>]*>([\s\S]*?)<\/li>/i, (m: string, inner: string) => {
+    const ordered = token.ordered;
+    const start = token.start || 1;
+    
+    const itemsHtml = token.items.map((item, index) => {
+      // Use block parser for list item content
+      let inner = this.parser.parse(item.tokens);
+      // Clean up paragraph margins for the first element
+      inner = inner.replace(/^<p style="([^"]*)"/i, (m: string, s: string) => {
+        const cleanS = s.replace(/margin\s*:\s*[^;]+;?/gi, "margin: 0;");
+        return `<p style="${cleanS}"`;
+      });
       inner = inner.replace(/<input disabled="" type="checkbox">/gi, "");
-      inner = inner.replace(/^<p[^>]*>/i, "").replace(/<\/p>$/i, "");
 
-      const iconHtml = !token.task ? template.listIcon : "";
-      // For WeChat: highly compatible flex-like layout using table or inline-block
-      return `<li style="${listItemStyle}">
-        <section style="display: flex; align-items: flex-start; justify-content: flex-start;">
-          ${iconHtml}
-          <section style="flex: 1;">${inner}</section>
+      let icon = "";
+      if (item.task) {
+        icon = item.checked
+          ? `<section style="display: inline-block; width: 14px; height: 14px; line-height: 14px; text-align: center; border: 2px solid #000000; background-color: #10b981; color: #000000; font-size: 10px; font-weight: bold; margin-top: 4px; box-sizing: border-box;">√</section>`
+          : `<section style="display: inline-block; width: 14px; height: 14px; border: 2px solid #000000; background-color: #ffffff; margin-top: 4px; box-sizing: border-box; overflow: hidden;"><br/></section>`;
+      } else if (ordered) {
+        const num = start + index;
+        if (template.category === "neo-brutalism") {
+          icon = `<section style="display: inline-block; width: 20px; height: 20px; line-height: 20px; text-align: center; background-color: ${template.themeColor}; color: #000000; border: 2px solid #000000; font-size: 12px; font-weight: 900; box-shadow: 2px 2px 0px #000000; box-sizing: border-box; overflow: hidden;">${num}</section>`;
+        } else {
+          icon = `<section style="display: inline-block; color: ${template.themeColor}; font-weight: bold; font-family: sans-serif;">${num}.</section>`;
+        }
+      } else {
+        icon = template.listIcon;
+      }
+
+      const iconWidth = template.category === "neo-brutalism" ? 32 : 24;
+
+      // Extremely robust float layout for WeChat Official Accounts
+      return `<section style="display: block; clear: both; margin-bottom: 12px;">
+        <section style="float: left; width: ${iconWidth}px; box-sizing: border-box;">
+          <section style="text-align: left;">${icon}</section>
         </section>
-      </li>`;
-    });
-    return html;
+        <section style="margin-left: ${iconWidth}px; box-sizing: border-box; overflow: hidden;">
+          <section style="display: block; overflow: hidden;">
+            ${inner}
+          </section>
+        </section>
+        <section style="display: block; clear: both; height: 0; line-height: 0; font-size: 0; overflow: hidden;"></section>
+      </section>`;
+    }).join("");
+
+    return `<section style="${bgFallback(template.listStyle)} padding: 0; margin: 20px 0 16px 0;">${itemsHtml}</section>`;
   };
 
   customRenderer.strong = function (token: Tokens.Strong) {
