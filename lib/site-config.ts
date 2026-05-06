@@ -8,8 +8,8 @@ export const SITE_BRAND = "TypeZen";
 
 export const SITE_PRODUCT_NAME = "公众号一键排版助手";
 
-/** 默认 <title>：品牌前置，兼顾「TypeZen」「AI 排版」「公众号」「Markdown」「微信」等检索词 */
-export const SITE_TITLE_DEFAULT = `${SITE_BRAND}｜${SITE_PRODUCT_NAME} — AI 一键排版 · Markdown 转微信 · 72 套模板`;
+/** 默认 <title>：品牌前置，突出专业排版工具定位，弱化 AI 关键词的紧邻性 */
+export const SITE_TITLE_DEFAULT = `${SITE_BRAND}｜${SITE_PRODUCT_NAME} — 专业的 Markdown 转微信排版工具 · 72 套精美模板 · 智能排版优化`;
 
 /**
  * <meta name="description">：首句包含品牌与域名，便于品牌词与「site:typezen.online」类检索

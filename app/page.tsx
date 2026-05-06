@@ -8,6 +8,7 @@ import { MarkdownEditorPane } from "./_components/markdown-editor-pane";
 import { PreviewPane } from "./_components/preview-pane";
 import { RewardModal } from "./_components/reward-modal";
 import { SettingsPane } from "./_components/settings-pane";
+import { AppFooter } from "./_components/app-footer";
 import { Toast } from "./_components/toast";
 import { sampleText } from "./_lib/formatter-constants";
 import type { ActiveTab, FormatTweaks } from "./_types/formatter";
@@ -20,6 +21,7 @@ import { useTheme } from "./_hooks/use-theme";
 import { useToast } from "./_hooks/use-toast";
 import { useWordCount } from "./_hooks/use-word-count";
 import { allTemplates, groupedTemplates, renderArticle } from "./template-engine";
+import { AboutSection } from "./_components/about-section";
 
 const DEFAULT_FORMAT_TWEAKS: FormatTweaks = {
   fontSize: 16,
@@ -105,7 +107,7 @@ export default function Home() {
   };
 
   return (
-    <main className="h-screen overflow-hidden neo-app-bg flex flex-col font-sans relative">
+    <main className="min-h-screen flex flex-col neo-app-bg font-sans relative overflow-x-hidden">
       <Toast toast={toast} />
 
       <ImageInsertModal
@@ -144,61 +146,67 @@ export default function Home() {
 
       <RewardModal open={showReward} onClose={() => setShowReward(false)} />
 
-      <AppHeader
-        isDarkMode={isDarkMode}
-        toggleDarkMode={toggleDarkMode}
-        onShowReward={() => setShowReward(true)}
-        onCopy={handleCopy}
-        hasContent={Boolean(inputText.trim())}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <div className="h-screen flex flex-col overflow-hidden shrink-0">
+        <AppHeader
+          isDarkMode={isDarkMode}
+          toggleDarkMode={toggleDarkMode}
+          onShowReward={() => setShowReward(true)}
+          onCopy={handleCopy}
+          hasContent={Boolean(inputText.trim())}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
 
-      <div className="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-5 overflow-hidden">
-        <div className="flex flex-col md:flex-row gap-4 lg:gap-6 h-full">
-          <MarkdownEditorPane
-            activeTab={activeTab}
-            inputText={inputText}
-            setInputText={setInputText}
-            inputRef={inputRef}
-            onInputScroll={handleInputScroll}
-            onPaste={markdownTools.handlePaste}
-            wordCount={wordCount}
-            insertMarkdown={markdownTools.insertMarkdown}
-            insertHeading={markdownTools.insertHeading}
-            insertList={markdownTools.insertList}
-            insertCodeBlock={markdownTools.insertCodeBlock}
-            insertLink={markdownTools.insertLink}
-            insertImage={markdownTools.insertImage}
-            onAiFormat={handleAiFormat}
-            isAiFormatting={isAiFormatting}
-            onOpenAiConfig={() => aiSettings.setShowAiConfigModal(true)}
-            onRestoreSample={() => setInputText(sampleText)}
-          />
+        <div className="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-5 overflow-hidden">
+          <div className="flex flex-col md:flex-row gap-4 lg:gap-6 h-full">
+            <MarkdownEditorPane
+              activeTab={activeTab}
+              inputText={inputText}
+              setInputText={setInputText}
+              inputRef={inputRef}
+              onInputScroll={handleInputScroll}
+              onPaste={markdownTools.handlePaste}
+              wordCount={wordCount}
+              insertMarkdown={markdownTools.insertMarkdown}
+              insertHeading={markdownTools.insertHeading}
+              insertList={markdownTools.insertList}
+              insertCodeBlock={markdownTools.insertCodeBlock}
+              insertLink={markdownTools.insertLink}
+              insertImage={markdownTools.insertImage}
+              onAiFormat={handleAiFormat}
+              isAiFormatting={isAiFormatting}
+              onOpenAiConfig={() => aiSettings.setShowAiConfigModal(true)}
+              onRestoreSample={() => setInputText(sampleText)}
+            />
 
-          <PreviewPane
-            activeTab={activeTab}
-            previewRef={previewRef}
-            onPreviewScroll={handlePreviewScroll}
-            outputHtml={outputHtml}
-          />
+            <PreviewPane
+              activeTab={activeTab}
+              previewRef={previewRef}
+              onPreviewScroll={handlePreviewScroll}
+              outputHtml={outputHtml}
+            />
 
-          <SettingsPane
-            activeTab={activeTab}
-            allTemplatesCount={allTemplates.length}
-            groupedTemplates={groupedTemplates}
-            currentCategory={currentCategory}
-            setCurrentCategory={setCurrentCategory}
-            currentTemplateId={currentTemplateId}
-            setCurrentTemplateId={setCurrentTemplateId}
-            formatTweaks={formatTweaks}
-            setFormatTweaks={setFormatTweaks}
-            onResetFormatTweaks={() => setFormatTweaks(DEFAULT_FORMAT_TWEAKS)}
-            syncScroll={syncScroll}
-            setSyncScroll={setSyncScroll}
-          />
+            <SettingsPane
+              activeTab={activeTab}
+              allTemplatesCount={allTemplates.length}
+              groupedTemplates={groupedTemplates}
+              currentCategory={currentCategory}
+              setCurrentCategory={setCurrentCategory}
+              currentTemplateId={currentTemplateId}
+              setCurrentTemplateId={setCurrentTemplateId}
+              formatTweaks={formatTweaks}
+              setFormatTweaks={setFormatTweaks}
+              onResetFormatTweaks={() => setFormatTweaks(DEFAULT_FORMAT_TWEAKS)}
+              syncScroll={syncScroll}
+              setSyncScroll={setSyncScroll}
+            />
+          </div>
         </div>
+
+        <AppFooter />
       </div>
+
+      <AboutSection />
     </main>
   );
 }
