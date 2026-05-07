@@ -1,32 +1,36 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   try {
     /**
-     * 精准获取出口 IP 的逻辑：
-     * 1. 在 Vercel/Cloudflare 等平台，x-forwarded-for 头部包含了最真实的请求来源 IP。
-     * 2. req.ip 是 Next.js 自动从底层网关提取的 IP。
-     * 3. 对于本地开发，如果配置了代理，我们将结合多方信息。
+     * 仅保留最可靠的探测方式：
+     * 1. 线上环境：从代理头（Vercel/Cloudflare）读取出口 IP。
+     * 2. 本地环境：直接引导用户通过点击同步来捕获（100% 准确）。
      */
     const forwarded = req.headers.get("x-forwarded-for");
-    let ip = "";
-    
+    const realIp = req.headers.get("x-real-ip");
+
+    let detectedIp = "";
     if (forwarded) {
-      // 可能会有多个 IP（经过多层代理），取第一个
-      ip = forwarded.split(",")[0].trim();
+      detectedIp = forwarded.split(",")[0].trim();
+    } else if (realIp) {
+      detectedIp = realIp;
     } else {
-      ip = req.ip || "127.0.0.1";
+      detectedIp = req.ip || "";
     }
 
-    // 处理 IPv6 映射的 IPv4 情况 (如 ::ffff:1.2.3.4)
-    if (ip.startsWith("::ffff:")) {
-      ip = ip.substring(7);
+    if (detectedIp.startsWith("::ffff:")) {
+      detectedIp = detectedIp.substring(7);
     }
 
-    return NextResponse.json({ ip });
+    if (!detectedIp || detectedIp === "127.0.0.1" || detectedIp === "localhost") {
+      return NextResponse.json({ ip: "本地环境（请点击下方按钮探测）" });
+    }
+
+    return NextResponse.json({ ip: detectedIp });
   } catch (_err) {
-    return NextResponse.json({ ip: "无法探测 IP" });
+    return NextResponse.json({ ip: "点击探测按钮获取真值" });
   }
 }

@@ -66,11 +66,11 @@ export function AppHeader({
           </a>
           <button
             onClick={onShowWeChatSync}
-            className="neo-button neo-button-secondary px-4 py-2 flex items-center gap-2 text-sm"
+            className="neo-button bg-(--neo-green) text-white hover:brightness-110 px-4 py-2 flex items-center gap-2 text-sm"
             disabled={!hasContent}
           >
             <Send className="w-4 h-4 hidden sm:block" />
-            同步草稿
+            同步公众号
           </button>
           <button
             onClick={onCopy}
