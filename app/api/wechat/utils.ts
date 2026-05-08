@@ -46,7 +46,7 @@ export async function uploadImageToWeChat(accessToken: string, imageBuffer: Buff
   const url = `${WECHAT_API_BASE}/media/uploadimg?access_token=${accessToken}`;
   
   const formData = new FormData();
-  const blob = new Blob([processedBuffer], { type: 'image/jpeg' });
+  const blob = new Blob([new Uint8Array(processedBuffer)], { type: 'image/jpeg' });
   formData.append('media', blob, filename.endsWith('.png') || filename.endsWith('.jpg') ? filename : `${filename}.jpg`);
 
   const res = await fetch(url, {
@@ -77,7 +77,7 @@ export async function uploadCoverToWeChat(accessToken: string, imageBuffer: Buff
   const url = `${WECHAT_API_BASE}/material/add_material?access_token=${accessToken}&type=image`;
   
   const formData = new FormData();
-  const blob = new Blob([processedBuffer], { type: 'image/jpeg' });
+  const blob = new Blob([new Uint8Array(processedBuffer)], { type: 'image/jpeg' });
   formData.append('media', blob, filename);
 
   const res = await fetch(url, {

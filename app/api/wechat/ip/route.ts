@@ -18,7 +18,8 @@ export async function GET(req: NextRequest) {
     } else if (realIp) {
       detectedIp = realIp;
     } else {
-      detectedIp = req.ip || "";
+      // 在一些环境中，可以通过这种方式获取
+      detectedIp = (req as any).ip || "";
     }
 
     if (detectedIp.startsWith("::ffff:")) {
