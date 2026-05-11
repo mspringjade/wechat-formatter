@@ -127,6 +127,26 @@ git add . && git commit -m "feat: 新功能描述"
 git push
 ```
 
+### 新建分支与推送规则（重要）
+
+新建的分支默认没有绑定远程仓库。在第一次 push 时，**必须通过 `-u` 参数明确指定推送到私有仓库 (`origin`)**，避免误推到开源社区版。
+
+```bash
+# 1. 创建并切换到新分支
+git checkout -b feature/new-stuff
+
+# 2. ... 开发提交 ...
+git add . && git commit -m "feat: 新功能"
+
+# 3. 第一次推送时，绑定私有仓库 origin
+git push -u origin feature/new-stuff
+
+# 4. 之后在该分支上的提交只需执行：
+git push
+```
+
+> **Tip**: 如果忘了分支绑定在哪里，可以使用 `git branch -vv` 命令查看当前所有本地分支追踪的远程目标。
+
 ### 同步开源版更新（仅项目负责人操作）
 
 > ⚠️ 为避免冲突混乱，**同步开源版更新只由项目负责人执行**，其他成员不要自行 merge upstream。

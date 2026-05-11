@@ -22,7 +22,6 @@ import { useTheme } from "../_hooks/use-theme";
 import { useToast } from "../_hooks/use-toast";
 import { useWordCount } from "../_hooks/use-word-count";
 import { allTemplates, groupedTemplates, renderArticle } from "../template-engine";
-import { AboutSection } from "../_components/about-section";
 import { WeChatSyncModal } from "../_components/wechat-sync-modal";
 
 const DEFAULT_FORMAT_TWEAKS: FormatTweaks = {
@@ -230,8 +229,6 @@ export default function Home() {
 
         <AppFooter />
       </div>
-
-      <AboutSection />
     </main>
   );
 }

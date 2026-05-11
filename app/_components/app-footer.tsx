@@ -30,7 +30,7 @@ export function AppFooter() {
           <a
             href="https://github.com/mspringjade/wechat-formatter"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             className="neo-button neo-button-ghost p-1"
             title="GitHub 仓库 · Star 支持"
           >

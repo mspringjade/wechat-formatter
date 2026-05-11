@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import {
   SITE_BRAND,
   SITE_DESCRIPTION,
-  SITE_HOST,
+  SITE_KEYWORDS,
   SITE_OG_SITE_NAME,
   SITE_TITLE_DEFAULT,
   SITE_URL,
 } from "@/lib/site-config";
+import type { Metadata, Viewport } from "next";
 import { JsonLd } from "./json-ld";
 import "./globals.css";
 
@@ -23,33 +23,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_BRAND,
   title: {
     default: SITE_TITLE_DEFAULT,
-    template: `%s · ${SITE_BRAND}`,
+    template: `%s | ${SITE_BRAND}`,
   },
   description: SITE_DESCRIPTION,
-  keywords: [
-    "TypeZen",
-    "typezen",
-    "TypeZen 排版",
-    "TypeZen 编辑器",
-    "TypeZen 公众号排版",
-    SITE_HOST,
-    "公众号排版",
-    "微信公众号排版",
-    "Markdown 排版",
-    "微信编辑器",
-    "公众号编辑器",
-    "Markdown 转微信",
-    "智能一键排版",
-    "AI 排版",
-    "一键排版",
-    "文章排版工具",
-    "公众号美化",
-  ],
+  keywords: SITE_KEYWORDS,
   authors: [{ name: SITE_BRAND, url: SITE_URL }],
   creator: SITE_BRAND,
   publisher: SITE_BRAND,
@@ -76,7 +63,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: `${SITE_OG_SITE_NAME} · ${SITE_HOST}`,
+        alt: `${SITE_OG_SITE_NAME} | typezen.online`,
       },
     ],
   },
@@ -85,6 +72,8 @@ export const metadata: Metadata = {
     title: SITE_TITLE_DEFAULT,
     description: SITE_DESCRIPTION,
     images: ["/og-image.png"],
+    site: "@TypeZen",
+    creator: "@TypeZen",
   },
   robots: {
     index: true,

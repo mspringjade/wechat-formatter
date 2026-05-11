@@ -33,7 +33,7 @@ export function AppHeader({
         >
           <img
             src="/logo.png"
-            alt="TypeZen"
+            alt="TypeZen | 微信公众号 Markdown 智能排版助手"
             width={40}
             height={40}
             className="w-10 h-10 p-1 border-2 border-(--neo-ink) shadow-[3px_3px_0_0_var(--neo-ink)] bg-white"
@@ -61,7 +61,7 @@ export function AppHeader({
           <a
             href="https://github.com/mspringjade/wechat-formatter"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             className="neo-button neo-button-ghost px-3 py-2 flex items-center gap-1.5"
             title="GitHub 仓库 · Star 支持"
           >
