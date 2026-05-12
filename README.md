@@ -1,4 +1,4 @@
-# 公众号一键排版助手 Pro (WeChat Formatter Pro)
+# 🔒 公众号一键排版助手 Pro (WeChat Formatter Pro)
 
 > 本仓库为商业版私有仓库，基于开源版 [wechat-formatter](https://github.com/mspringjade/wechat-formatter) 扩展开发。
 
