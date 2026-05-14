@@ -2,6 +2,8 @@
 
 Fixed-IP relay worker for WeChat Official Account API. Sits between the Next.js app and WeChat, providing a single static IP for IP whitelist registration.
 
+> Current status: optional future path. TypeZen does not currently buy or operate a VPS worker by default. The main app can sync through the local Next.js adapter and diagnose the current server egress IP from WeChat whitelist errors. Deploy this worker only if fixed-IP sync is reactivated.
+
 ## Quick Start
 
 ```bash

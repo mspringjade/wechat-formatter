@@ -73,7 +73,7 @@ Do not optimize the first commercial version for:
    Do not turn the editor into a generic visual composer too early.
 
 2. **Publishing automation is the paid value.**
-   Templates and copy/paste remain generous in Free. Stable platform sync is Pro.
+   Templates and copy/paste remain generous in Free. Draft sync, image transfer, and actionable publish diagnostics are Pro. Fixed-IP infrastructure is a future option only if paid demand justifies hosted server operations.
 
 3. **Platform support must be adapter-based.**
    WeChat is the first adapter, not a hard-coded destiny.
@@ -106,7 +106,7 @@ Free should continue to include:
 Pro should charge for new value:
 
 - Hosted publishing automation
-- Stable WeChat fixed-IP sync infrastructure
+- WeChat draft sync with current egress IP detection and whitelist diagnostics
 - Image transfer and cover handling
 - Publish diagnostics
 - Future multi-platform adapters
@@ -137,7 +137,7 @@ Before paid launch:
 
 Suggested message:
 
-> TypeZen's core editor will remain free. Pro is for users who want hosted publishing automation, starting with reliable WeChat draft sync. Paid revenue helps keep the free editor maintained and funds future platform adapters.
+> TypeZen's core editor will remain free. Pro is for users who want hosted publishing automation, starting with WeChat draft sync, image transfer, and publish diagnostics. Paid revenue helps keep the free editor maintained and funds future platform adapters.
 
 ### Conversion Strategy
 
@@ -181,7 +181,7 @@ Pro Early Access:
 - WeChat Official Account draft sync
 - Automatic article image upload to WeChat
 - Cover image extraction and upload
-- Stable fixed-IP sync worker
+- Current server egress IP detection for WeChat whitelist setup
 - Sync error diagnosis for IP whitelist and credential problems
 - Higher reliability support
 
@@ -284,14 +284,16 @@ Key implementation decisions:
 - Do not add full user accounts in the first paid release.
 - Do not store article content by default.
 - Do not store AppSecret server-side in Phase 1.
-- Do use a fixed-IP sync worker for WeChat API calls.
+- Do not promise a fixed egress IP while the VPS/worker deployment is paused.
+- Do use the current app-hosted sync path with IP whitelist diagnostics, and keep the fixed-IP worker as an optional future path.
 - Do log sync metadata and errors without logging article body or secrets.
 
 Acceptance criteria:
 
 - A valid license key is required for WeChat sync.
 - Free users can still copy HTML manually.
-- WeChat sync uses a fixed egress IP.
+- WeChat sync surfaces the current server egress IP when WeChat returns an IP whitelist error.
+- Product copy does not imply fixed-IP stability unless a fixed-IP worker is actually deployed and configured.
 - Failed syncs return clear, actionable errors.
 - Server logs redact AppID, AppSecret, API keys, article HTML, and Markdown.
 - At least 5 real WeChat accounts can sync drafts successfully before public paid launch.
@@ -364,7 +366,7 @@ Browser Editor
   -> WeChat API
 ```
 
-This is good for a prototype but weak for commercial reliability because WeChat requires stable IP whitelisting and because future platforms should not be bolted into WeChat-specific components.
+This is good for the current low-infrastructure Early Access path. It can create WeChat drafts and diagnose IP whitelist failures by surfacing the current server egress IP, but it does not guarantee IP stability on serverless platforms.
 
 ### 6.2 Target Shape
 
@@ -377,7 +379,7 @@ Browser Editor
   -> /api/publish/:platform
   -> License / Plan Gate
   -> Publish Job
-  -> Fixed-IP Sync Worker
+  -> Sync Backend (current app-hosted adapter; optional fixed-IP worker)
   -> Platform Adapter
   -> External Platform API
 ```
@@ -427,28 +429,36 @@ Implementation note:
 - The exact TypeScript names can change during implementation.
 - The important rule is that WeChat-specific upload and draft logic must live behind an adapter boundary before adding more platforms.
 
-### 6.4 Fixed-IP Worker
+### 6.4 Current IP Whitelist Strategy And Optional Fixed-IP Worker
 
-WeChat sync should move to a worker/server with stable outbound IP.
+Current decision:
 
-Recommended MVP option:
+- Do not buy or operate a VPS solely for the fixed-IP worker at this stage.
+- Keep the default WeChat sync path inside the Next.js app.
+- When WeChat returns an IP whitelist error, parse and display the current server egress IP so the user can add it to the WeChat whitelist.
+- Make product copy clear that this is IP detection/diagnostics, not a fixed-IP stability guarantee.
+
+Optional future worker path:
 
 - A small VPS with static IPv4.
 - Node.js worker service.
 - The Next.js app calls the worker with an HMAC-signed request.
 - The worker performs WeChat token, image upload, cover upload, and draft creation.
 
-Avoid relying on serverless dynamic IPs for paid WeChat sync.
+Only revisit this path if paid usage proves the need for a stable hosted sync channel. Until then, do not expose fixed-IP worker as an active Pro promise.
 
-Required environment variables:
+Current optional worker environment variables:
 
 - `SYNC_WORKER_URL`
-- `SYNC_WORKER_SECRET`
-- `TYPEZEN_LICENSE_SECRET`
-- `DATABASE_URL`
+- `SYNC_WORKER_HMAC_SECRET`
+- `WECHAT_DEFAULT_APPID`
+- `WECHAT_DEFAULT_APPSECRET`
+- `WECHAT_ACCOUNTS` for multiple accounts
 
 Optional future variables:
 
+- `TYPEZEN_LICENSE_SECRET`
+- `DATABASE_URL`
 - `ENCRYPTION_KEY`
 - `PAYMENT_WEBHOOK_SECRET`
 - `OPENAI_API_KEY` if hosted AI is added later
@@ -654,7 +664,7 @@ Do not make the editor feel locked down. The paid wall appears only when using P
 WeChat errors must be translated into user actions:
 
 - Invalid AppSecret: "Check AppID/AppSecret."
-- IP whitelist error: "Add this fixed IP to WeChat IP whitelist."
+- IP whitelist error: "Add the detected current server egress IP to WeChat IP whitelist; re-detect if sync fails again."
 - Missing cover image: "Upload a cover image or include one valid image."
 - Image upload failure: "This image could not be fetched or compressed."
 - Draft API failure: "WeChat rejected the draft. Show error code and details."
@@ -761,7 +771,7 @@ Work:
 
 - Remove or soften unsupported claims about LaTeX rendering and 20+ code themes unless implemented.
 - Replace "encrypted localStorage" language with accurate local-only wording.
-- Make Pro copy say "early access" or "planned" until license gating and fixed-IP sync are implemented.
+- Make Pro copy say "early access" and describe current egress IP detection/whitelist diagnostics instead of fixed-IP stability unless a worker is deployed.
 
 Verify:
 
@@ -837,7 +847,9 @@ Verify:
 - Existing WeChat sync behavior remains intact.
 - Adapter interface can express future platform capabilities.
 
-### Task 5: Add Fixed-IP Worker Integration
+### Task 5: Optional Fixed-IP Worker Integration (Paused)
+
+Status: paused. The current product direction does not buy or operate a VPS worker. Keep the code path available for future deployment, but do not treat it as the default Pro implementation.
 
 New package/location options:
 
@@ -901,7 +913,7 @@ Before accepting paid users:
 - `npm run lint` clean.
 - `npm run build` passes.
 - WeChat sync tested with at least 5 accounts.
-- Fixed IP documented for users.
+- Current egress IP detection and whitelist limitations documented for users.
 - Privacy copy updated.
 - Terms/refund policy drafted, even if simple.
 - Manual license issue process documented.
@@ -924,7 +936,7 @@ Build in this order:
 
 1. Preserve the existing free editor promise and explain the open-core boundary.
 2. Make current claims honest.
-3. Make WeChat sync reliable with fixed IP.
+3. Make WeChat sync reliable within the current app-hosted path and keep IP diagnostics honest.
 4. Gate it with a simple Pro license.
 5. Sell to 10 real users from the existing power-user base.
 6. Add a small database for licenses and publish jobs once paid sync starts.

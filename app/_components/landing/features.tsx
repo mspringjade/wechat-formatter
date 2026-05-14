@@ -33,7 +33,7 @@ const features = [
     icon: <Shield className="w-8 h-8" />,
     title: "本地数据隐私安全",
     description:
-      "文章数据 100% 留在本地浏览器。支持填入您自己的 API Key，我们绝不保存您的任何文章内容和私密密钥。",
+      "编辑与预览默认在本地浏览器完成。启用 AI 排版或微信同步时，仅为完成请求临时发送必要内容，我们不会持久化保存文章和私密密钥。",
     color: "var(--neo-pink)",
   },
   {

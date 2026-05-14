@@ -32,8 +32,8 @@ const plans = [
       "自动上传文章配图至微信",
       "自动提取文章封面图",
       "自动创建公众号草稿",
-      "固定出口 IP 同步通道（即将开放）",
-      "同步错误智能诊断",
+      "出口 IP 探测与白名单诊断",
+      "同步错误定位与处理建议",
     ],
     highlight: true,
     cta: "申请 Early Access",
@@ -134,8 +134,8 @@ export function LandingPricing() {
           <div className="neo-panel p-8 bg-white text-center space-y-6">
             <h3 className="text-2xl font-black text-(--neo-ink)">什么是 Early Access？</h3>
             <p className="font-bold text-(--neo-muted) leading-relaxed">
-              TypeZen 的核心编辑器将永久免费。专业版提供托管发布自动化服务——固定的出口
-              IP、图片自动转存、草稿同步等需要服务器资源的功能。
+              TypeZen 的核心编辑器将永久免费。专业版提供托管发布自动化服务——图片自动转存、
+              草稿同步、出口 IP 白名单诊断等需要服务端能力的功能。
             </p>
             <p className="font-bold text-(--neo-muted) leading-relaxed">
               付费收入用于维护免费编辑器、支撑服务器成本和开发更多平台适配器。

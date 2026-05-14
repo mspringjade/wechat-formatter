@@ -1,13 +1,27 @@
 # Fixed-IP Worker Design
 
-> Status: design document (no code changes)
+> Status: paused / optional future path
 > Created: 2026-05-12
-> Depends on: Phase 1 Task 3 (license gate), Task 4 (adapter abstraction), Task 5-lite (remote adapter skeleton)
+> Last reviewed: 2026-05-14
+> Depends on: license gate, adapter abstraction, optional remote worker code path
 > Audience: owner, Claude Code, implementation agents
+
+## 0. Current Decision
+
+This design is no longer the active Phase 1 deployment path. The project is not buying or operating a VPS solely for a fixed-IP worker at this stage.
+
+Current product behavior:
+
+- The default WeChat sync path stays inside the Next.js app unless `SYNC_WORKER_URL` is configured.
+- When WeChat returns an IP whitelist error, TypeZen parses the current server egress IP from the WeChat error and shows it to the user for whitelist setup.
+- This current IP detection is a diagnostic feature, not a fixed-IP stability guarantee.
+- The worker code remains in `worker/` as an optional future path if paid usage justifies a stable hosted relay.
+
+Do not market fixed-IP sync as active unless a real fixed-IP worker is deployed and configured.
 
 ## 1. Problem
 
-WeChat Official Account API requires servers to register a fixed IP in the IP whitelist. Vercel serverless functions have dynamic IPs. To enable "one-click sync to WeChat draft box" for Pro users, we need a fixed-IP relay worker that sits between the Next.js app and WeChat API.
+WeChat Official Account API requires servers to register a fixed IP in the IP whitelist. Vercel serverless functions can have dynamic IPs. If TypeZen later reactivates a fixed-IP sync promise, it needs a relay worker that sits between the Next.js app and WeChat API.
 
 ## 2. Goals and Non-Goals
 
@@ -145,7 +159,7 @@ This is a Phase 2 item, not MVP.
 
 ### 5.1 Why HMAC, not shared secret header
 
-The current skeleton uses `X-TypeZen-Worker-Secret: <plaintext>` which is a shared secret sent in every request. Problems:
+Earlier skeletons used `X-TypeZen-Worker-Secret: <plaintext>`, a shared secret sent in every request. Problems:
 
 - Any network observer (proxy, log aggregator, CDN edge log) can capture it.
 - No replay protection. A captured request can be re-sent.
@@ -160,7 +174,7 @@ Input:
   - body: JSON string of the request payload
   - timestamp: current Unix time in seconds (string)
   - nonce: crypto.randomUUID()
-  - workerSecret: SYNC_WORKER_SECRET env var (shared key for HMAC, not AppSecret)
+  - workerSecret: SYNC_WORKER_HMAC_SECRET env var (shared key for HMAC, not AppSecret)
 
 Steps:
   1. payload = `${timestamp}\n${nonce}\n${SHA256(body)}`
@@ -190,7 +204,7 @@ Steps:
 
 | Property | Mechanism |
 |----------|-----------|
-| Authentication | Only holders of `SYNC_WORKER_SECRET` can compute valid HMAC |
+| Authentication | Only holders of `SYNC_WORKER_HMAC_SECRET` can compute valid HMAC |
 | Integrity | Signature covers body hash, so body tampering invalidates signature |
 | Replay protection | Timestamp window (±300s) + nonce dedup (600s TTL set) |
 | Clock skew tolerance | 5-minute window handles minor drift |
@@ -216,7 +230,7 @@ In-memory `Map<string, number>` mapping nonce → expiry timestamp. A `setInterv
 | WeChat API response (error) | Yes | errcode + errmsg (WeChat's own error format) |
 | Request IP (from Next.js) | Yes | For abuse detection |
 | HMAC signature | **No** | Never log |
-| SYNC_WORKER_SECRET | **Never** | Must not appear in any log path |
+| SYNC_WORKER_HMAC_SECRET | **Never** | Must not appear in any log path |
 | coverImage (base64) | **No** | Log only "cover:base64" or "cover:url" or "cover:none" |
 | External image URLs fetched | **No** | Log only "image:remote:N" (count) |
 
@@ -274,14 +288,11 @@ Worker returns a JSON body with a consistent shape. The Next.js sync route maps 
 
 ### 8.1 `app/_lib/publishing/adapters/wechat-remote.ts`
 
-Current state: **skeleton**. Has TODO comments for HMAC. Uses plaintext `X-TypeZen-Worker-Secret` header.
+Current state: implemented as an optional remote adapter. It uses `SYNC_WORKER_HMAC_SECRET`, signs timestamp + nonce + body hash, sends `X-TypeZen-Timestamp`, `X-TypeZen-Nonce`, and `X-TypeZen-Signature`, and posts only `{ article, appId }` to the worker.
 
-Changes needed:
-- Remove `SYNC_WORKER_SECRET` env var usage from the adapter. HMAC key comes from a new `SYNC_WORKER_HMAC_SECRET` env var (distinct from any plaintext secret).
-- Implement signing function: timestamp + nonce + body hash → HMAC-SHA256.
-- Set `X-TypeZen-Timestamp`, `X-TypeZen-Nonce`, `X-TypeZen-Signature` headers.
-- Remove `credentials.appSecret` from the body. Send only `{ article, appId }`.
-- Add `AbortSignal.timeout(30_000)` (already present, keep it).
+Remaining caveat:
+- The remote path is inactive unless `SYNC_WORKER_URL` is configured.
+- Do not configure it in production unless a real fixed-IP worker is deployed and tested.
 
 ### 8.2 `app/_lib/publishing/adapters/index.ts`
 
@@ -291,45 +302,43 @@ Changes needed: none. The selector logic is already correct.
 
 ### 8.3 `app/api/wechat/sync/route.ts`
 
-Current state: correct. License check before body parsing, delegates to adapter.
+Current state: license check runs before sync work, the route delegates to the selected adapter, and it does not pass `appSecret` into the adapter credentials when `SYNC_WORKER_URL` is configured.
 
-Changes needed:
-- In the adapter call, stop passing `appSecret` in credentials when remote adapter is selected. Pass only `{ appId, author }`.
-- This can be done by checking `process.env.SYNC_WORKER_URL` in the route, or by letting the remote adapter ignore the field (current behavior — adapter only reads `appId`).
-- Prefer explicit: route should not send `appSecret` to the adapter if it knows the adapter is remote. This is defense in depth.
+Remaining caveat:
+- The browser request body and UI still require AppSecret because the local adapter path remains the default fallback.
 
 ### 8.4 `app/_lib/publishing/types.ts`
 
-Current state: `CreateDraftInput.credentials` is `Record<string, string>`.
-
-Changes needed:
-- Define `WeChatCredentials` type: `{ appId: string; appSecret?: string; author?: string }`.
-- Update `CreateDraftInput.credentials` to `WeChatCredentials`.
-- This makes the contract explicit: `appSecret` is optional because the remote adapter does not need it.
+Current state: `CreateDraftInput.credentials` uses `WeChatCredentials` with optional `appSecret`, making the local/remote adapter contract explicit.
 
 ## 9. Phased Implementation Plan
+
+Status: paused. The codebase already contains an optional Hono/Node worker with HMAC verification and WeChat draft relay logic, but it is not deployed as the active product path. The following phases apply only if fixed-IP deployment is reactivated.
 
 ### Phase A: MVP Worker
 
 **Goal**: Worker relays WeChat API calls on a fixed IP. HMAC authenticates requests. Worker holds AppSecret in env.
 
-Scope:
-- [ ] Create worker project (Hono on Cloudflare Workers, or Express on a VPS with a static IP).
-- [ ] Implement HMAC verification middleware.
-- [ ] Implement WeChat API relay: access token → image transfer → cover upload → draft creation.
-- [ ] Port `fetchImageBuffer`, `processHtmlImages`, `uploadCoverToWeChat`, `addWeChatDraft` logic from `app/api/wechat/utils.ts` into worker.
-- [ ] Worker reads AppSecret from its own env (`WECHAT_DEFAULT_APPSECRET`).
-- [ ] Worker returns `{ success, externalDraftId?, error?, details?, detectedIp? }`.
-- [ ] Implement nonce dedup with in-memory Map + TTL sweep.
-- [ ] Health check endpoint: `GET /health` returns `{ status: "ok", ip: "<worker-ip>" }`.
+Current code state:
+- Worker project exists under `worker/`.
+- HMAC verification exists in `worker/src/hmac.ts`.
+- WeChat draft relay exists in `worker/src/wechat.ts`.
+- Worker reads AppSecret from `WECHAT_DEFAULT_APPID` / `WECHAT_DEFAULT_APPSECRET` or `WECHAT_ACCOUNTS`.
+- Worker returns `{ success, externalDraftId?, error?, details?, detectedIp? }`.
+- Nonce dedup exists with an in-memory TTL map.
+- Health check exists, but currently returns `{ status: "ok" }` without the worker public IP.
 
 On the Next.js side:
-- [ ] Rewrite `wechat-remote.ts`: HMAC signing, remove appSecret from body.
-- [ ] Define `WeChatCredentials` in `types.ts`.
-- [ ] Update sync route to not pass appSecret when using remote adapter.
-- [ ] Set env vars: `SYNC_WORKER_URL`, `SYNC_WORKER_HMAC_SECRET`.
+- `wechat-remote.ts` signs requests with HMAC and excludes AppSecret from the worker body.
+- `WeChatCredentials` is defined with optional `appSecret`.
+- The sync route does not pass AppSecret into adapter credentials when using remote mode.
+- `SYNC_WORKER_URL` and `SYNC_WORKER_HMAC_SECRET` must be set only when a real worker deployment is ready.
 
-**Does NOT include**: multi-account, database, user self-service config.
+Still required before reactivation:
+- Deploy the worker on infrastructure with a stable public IPv4.
+- Add the stable IPv4 to the WeChat IP whitelist for the configured account(s).
+- Confirm end-to-end draft sync from the Next.js app through the worker.
+- Update user-facing copy to explicitly promise fixed-IP sync only after this is verified.
 
 ### Phase B: Credential Hardening
 
@@ -365,19 +374,25 @@ Scope:
 - [ ] Worker may need multiple fixed IPs if platforms have separate whitelists (or use a single IP with port-based routing).
 - [ ] Monitoring dashboard: success rate, latency, error breakdown per platform.
 
-## 10. Current Skeleton Status
+## 10. Current Code Status
 
-The following code is **skeleton only** and must NOT be deployed as-is:
+The worker path is implemented enough to compile and remain available as an optional future deployment, but it is not the active product path.
 
-| File | Issue |
-|------|-------|
-| `wechat-remote.ts` | Uses plaintext `X-TypeZen-Worker-Secret` header. Has 4 TODO comments. No HMAC. Sends `credentials: { appId }` but type allows `appSecret` to leak through. |
-| `adapters/index.ts` | Correct, no changes needed. |
-| `sync/route.ts` | Correct. License check before body. Delegates to adapter. Passes `appSecret` in credentials (harmless today since remote adapter ignores it, but should be explicit). |
+Current status:
 
-The skeleton demonstrates the interface contract and data flow. It is safe to merge because:
-1. `SYNC_WORKER_URL` is not set → `getWeChatAdapter()` always returns local adapter.
-2. The remote adapter code path is unreachable in production.
-3. HMAC TODO comments make the incompleteness explicit.
+- `wechat-remote.ts` uses HMAC headers, not a plaintext worker-secret header.
+- `adapters/index.ts` still correctly switches to remote mode only when `SYNC_WORKER_URL` is set.
+- `sync/route.ts` validates the license first and avoids passing `appSecret` into adapter credentials for remote mode.
+- `worker/src/index.ts` exposes `/health` and `/wechat/draft`.
+- `worker/src/hmac.ts` implements timestamp, nonce, body hash, and constant-time signature verification.
+- `worker/src/accounts.ts` supports single-account and multi-account env configuration.
+- `worker/src/wechat.ts` implements access token, image transfer, cover upload, and draft creation.
 
-**Do NOT set `SYNC_WORKER_URL` until Phase A is complete and the HMAC implementation has been tested.**
+Current default behavior:
+
+1. `SYNC_WORKER_URL` is unset in normal app deployments.
+2. `getWeChatAdapter()` returns the local adapter.
+3. The local adapter calls WeChat from the Next.js runtime.
+4. If WeChat rejects the request with an IP whitelist error, the app surfaces the detected current egress IP to the user.
+
+Do not set `SYNC_WORKER_URL` unless the worker has been deployed on a stable fixed-IP host and tested end to end.

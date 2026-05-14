@@ -347,7 +347,8 @@ export function WeChatSyncModal({
                         <p className="text-xs font-black">同步提示</p>
                         <p className="text-[10px] font-bold leading-relaxed text-(--neo-ink)/80">
                           同步过程将自动把正文中的外部图片、Base64
-                          图片转存到微信服务器。请确保你的公众号已配置好本站的服务器出口 IP。
+                          图片转存到微信服务器。如遇 IP 白名单错误，可在账号配置页探测当前服务端出口 IP
+                          并加入微信后台白名单。
                         </p>
                       </div>
                     </div>
@@ -404,12 +405,12 @@ export function WeChatSyncModal({
                     <div className="border-[4px] border-(--neo-ink) p-5 bg-(--neo-yellow) shadow-[8px_8px_0_0_rgba(0,0,0,1)] space-y-4 animate-in slide-in-from-bottom-4 duration-500">
                       <div className="flex items-center gap-2 border-b-2 border-(--neo-ink) pb-2">
                         <Star className="w-5 h-5 fill-(--neo-ink)" />
-                        <p className="text-sm font-black uppercase">🎯 已捕获真实出口 IP</p>
+                        <p className="text-sm font-black uppercase">🎯 已捕获当前出口 IP</p>
                       </div>
 
                       <div className="space-y-3">
                         <p className="text-xs font-bold leading-relaxed">
-                          检测到您的公众号尚未将本站 IP 加入白名单。请复制下方 IP
+                          检测到您的公众号尚未将当前服务端出口 IP 加入白名单。请复制下方 IP
                           并前往微信后台完成配置：
                         </p>
 
@@ -553,14 +554,14 @@ export function WeChatSyncModal({
                     <div className="bg-white/50 border-2 border-dashed border-(--neo-ink) p-4 text-center">
                       <p className="text-[11px] font-bold text-(--neo-ink) leading-relaxed">
                         尚未获取出口 IP。微信对 IP
-                        校验极严，建议通过下方按钮进行一次“握手测试”来捕获真值。
+                        校验极严，建议通过下方按钮触发一次授权校验来捕获当前值。
                       </p>
                     </div>
                   ) : (
                     <div className="bg-black text-white p-4 rounded-none border-2 border-white shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-[10px] font-black text-(--neo-yellow) uppercase">
-                          精准出口 IP 已捕获
+                          当前出口 IP 已捕获
                         </p>
                         <button
                           onClick={() => {
@@ -595,7 +596,7 @@ export function WeChatSyncModal({
                       ) : (
                         <Star className="w-4 h-4" />
                       )}
-                      {serverIp ? "重新探测 IP" : "点击探测精准出口 IP"}
+                      {serverIp ? "重新探测 IP" : "点击探测当前出口 IP"}
                     </button>
 
                     <div className="bg-white/30 border-2 border-(--neo-ink) p-3 space-y-2">
@@ -614,7 +615,7 @@ export function WeChatSyncModal({
                         <span className="text-(--neo-pink) font-bold">1-3 分钟</span>。
                       </p>
                       <p className="text-[9px] font-bold text-(--neo-ink)/70 leading-relaxed italic">
-                        提示：如果上面显示的 IP 与微信提示不符，请点击探测按钮。我们会通过一次授权失败来捕获微信看到的真实出口 IP。
+                        提示：如果同步再次失败，或部署平台更换了出口 IP，请点击探测按钮重新捕获当前值。
                       </p>
                     </div>
                   </div>
